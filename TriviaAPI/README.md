@@ -14,6 +14,21 @@ That's where you come in! Help them finish the trivia app so they can start hold
 
 Completing this trivia app will give you the ability to structure plan, implement, and test an API - skills essential for enabling your future applications to communicate with others.
 
+## Pre-requisites and local development
+
+Here we have used postgres as a database, so postgres must be installed beforehand with database bookshelf.
+
+To start postgres server run `pg_ctl -D file_path(eg.C:\postgres\data) start`
+
+There is a file to create table and populate the table
+
+- trivia.psql
+  on a bash terminal you can run the following files using the commands:
+
+```
+psql -U _beast101_ -d trivia -h localhost -p 5432 -f trivia.psql
+```
+
 ## Starting and Submitting the Project
 
 [Fork](https://help.github.com/en/articles/fork-a-repo) the project repository and [clone](https://help.github.com/en/articles/cloning-a-repository) your forked repository to your machine. Work on the project locally and make sure to push all your changes to the remote repository before submitting the link to your repository in the Classroom.
