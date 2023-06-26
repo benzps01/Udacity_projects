@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
-import $ from 'jquery';
-import '../stylesheets/FormView.css';
+import React, { Component } from "react";
+import $ from "jquery";
+import "../stylesheets/FormView.css";
 
 class FormView extends Component {
   constructor(props) {
     super();
     this.state = {
-      question: '',
-      answer: '',
+      question: "",
+      answer: "",
       difficulty: 1,
+      rating: 1,
       category: 1,
       categories: {},
     };
@@ -17,13 +18,13 @@ class FormView extends Component {
   componentDidMount() {
     $.ajax({
       url: `/categories`, //TODO: update request URL
-      type: 'GET',
+      type: "GET",
       success: (result) => {
         this.setState({ categories: result.categories });
         return;
       },
       error: (error) => {
-        alert('Unable to load categories. Please try your request again');
+        alert("Unable to load categories. Please try your request again");
         return;
       },
     });
@@ -32,12 +33,13 @@ class FormView extends Component {
   submitQuestion = (event) => {
     event.preventDefault();
     $.ajax({
-      url: '/questions', //TODO: update request URL
-      type: 'POST',
-      dataType: 'json',
-      contentType: 'application/json',
+      url: "/questions/add", //TODO: update request URL
+      type: "POST",
+      dataType: "json",
+      contentType: "application/json",
       data: JSON.stringify({
         question: this.state.question,
+        rating: this.state.rating,
         answer: this.state.answer,
         difficulty: this.state.difficulty,
         category: this.state.category,
@@ -47,11 +49,36 @@ class FormView extends Component {
       },
       crossDomain: true,
       success: (result) => {
-        document.getElementById('add-question-form').reset();
+        document.getElementById("add-question-form").reset();
         return;
       },
       error: (error) => {
-        alert('Unable to add question. Please try your request again');
+        alert("Unable to add question. Please try your request again");
+        return;
+      },
+    });
+  };
+
+  submitCategory = (event) => {
+    event.preventDefault();
+    $.ajax({
+      url: "/categories/add", //TODO: update request URL
+      type: "POST",
+      dataType: "json",
+      contentType: "application/json",
+      data: JSON.stringify({
+        category: this.inputNode.value,
+      }),
+      xhrFields: {
+        withCredentials: true,
+      },
+      crossDomain: true,
+      success: (result) => {
+        document.getElementById("add-category-form").reset();
+        return;
+      },
+      error: (error) => {
+        alert("Unable to add category. Please try your request again");
         return;
       },
     });
@@ -63,34 +90,54 @@ class FormView extends Component {
 
   render() {
     return (
-      <div id='add-form'>
+      <div id="add-form">
         <h2>Add a New Trivia Question</h2>
         <form
-          className='form-view'
-          id='add-question-form'
+          className="form-view"
+          id="add-question-form"
           onSubmit={this.submitQuestion}
         >
           <label>
             Question
-            <input type='text' name='question' onChange={this.handleChange} />
+            <input
+              type="text"
+              name="question"
+              onChange={this.handleChange}
+              required
+            />
           </label>
           <label>
             Answer
-            <input type='text' name='answer' onChange={this.handleChange} />
+            <input
+              type="text"
+              name="answer"
+              onChange={this.handleChange}
+              required
+            />
           </label>
           <label>
             Difficulty
-            <select name='difficulty' onChange={this.handleChange}>
-              <option value='1'>1</option>
-              <option value='2'>2</option>
-              <option value='3'>3</option>
-              <option value='4'>4</option>
-              <option value='5'>5</option>
+            <select name="difficulty" onChange={this.handleChange}>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select>
+          </label>
+          <label>
+            Rating
+            <select name="rating" onChange={this.handleChange}>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
             </select>
           </label>
           <label>
             Category
-            <select name='category' onChange={this.handleChange}>
+            <select name="category" onChange={this.handleChange}>
               {Object.keys(this.state.categories).map((id) => {
                 return (
                   <option key={id} value={id}>
@@ -100,7 +147,26 @@ class FormView extends Component {
               })}
             </select>
           </label>
-          <input type='submit' className='button' value='Submit' />
+          <input type="submit" className="button" value="Submit" />
+        </form>
+        <form
+          className="form-view"
+          id="add-category-form"
+          onSubmit={this.submitCategory}
+        >
+          <h2>Add a New Category</h2>
+          <label>
+            Category
+            <input
+              type="text"
+              name="new_category"
+              onChange={this.handleChange}
+              placeholder="Value"
+              required
+              ref={(node) => (this.inputNode = node)}
+            />
+          </label>
+          <input type="submit" className="button" value="Submit" />
         </form>
       </div>
     );
