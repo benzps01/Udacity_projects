@@ -120,6 +120,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
+node_env
 coffee/
 .venv
 env/
