@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Drink, DrinksService } from 'src/app/services/drinks.service';
+import { DrinksService, Drink } from 'src/app/services/drinks.service';
 import { ModalController } from '@ionic/angular';
 import { AuthService } from 'src/app/services/auth.service';
 
@@ -15,7 +15,8 @@ export class DrinkFormComponent implements OnInit {
   constructor(
     public auth: AuthService,
     private modalCtrl: ModalController,
-    private drinkService: DrinksService
+    private drinkService: DrinksService,
+    public drinks: DrinksService
     ) { }
 
   ngOnInit() {
@@ -44,9 +45,12 @@ export class DrinkFormComponent implements OnInit {
   closeModal() {
     this.modalCtrl.dismiss();
   }
-
+// -----------------------------------------------------------------------------------------------!
+// Added getDrinks() to frontend which updated when post or patch request is sent.
+// -----------------------------------------------------------------------------------------------!
   saveClicked() {
     this.drinkService.saveDrink(this.drink);
+    this.drinks.getDrinks()
     this.closeModal();
   }
 

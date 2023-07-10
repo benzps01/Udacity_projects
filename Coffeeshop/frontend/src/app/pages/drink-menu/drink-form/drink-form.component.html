@@ -10,22 +10,25 @@
 
     <form (ngSubmit)="logForm()">
       <ion-item>
+        <!-- -----------------------------------------------------------------------------------------------! -->
+        <!-- Added !auth.can(permissions) to disable users with only drinks-detail permission to edit data -->
+        <!-- -----------------------------------------------------------------------------------------------! -->
         <ion-label>Drink Title</ion-label>
-        <ion-input type="text" [(ngModel)]="drink.title" name="title"></ion-input>
+        <ion-input type="text" [(ngModel)]="drink.title" name="title" [disabled]="!auth.can('post:drinks') || !auth.can('patch:drinks')"></ion-input>
       </ion-item>
 
       <ion-item *ngFor="let ingredient of drink.recipe; let i = index;  trackBy: customTrackBy">
         <ion-label>Ingredient Name</ion-label>
-        <ion-input [(ngModel)]="drink.recipe[i].name" [name]="'Ingredient Title'+i"></ion-input>
+        <ion-input [(ngModel)]="drink.recipe[i].name" [name]="'Ingredient Title'+i" [disabled]="!auth.can('post:drinks') || !auth.can('patch:drinks')"></ion-input>
 
         <ion-label>Number of Parts</ion-label>
-        <ion-input type="number" [(ngModel)]="drink.recipe[i].parts" [name]="'Ingredient Parts'+i"></ion-input>
+        <ion-input type="number" [(ngModel)]="drink.recipe[i].parts" [name]="'Ingredient Parts'+i" [disabled]="!auth.can('post:drinks') || !auth.can('patch:drinks')"></ion-input>
 
         <ion-label>Color</ion-label>
-        <ion-input type="text" [(ngModel)]="drink.recipe[i].color" [name]="'Ingredient Color'+i"></ion-input>
-
-        <ion-button (click)="removeIngredient(i)" [disabled]="i==0 && drink.recipe.length==1">Remove</ion-button><br />
-        <ion-button (click)="addIngredient(i)" [disabled]="drink.recipe.length==5">ADD</ion-button><br />
+        <ion-input type="text" [(ngModel)]="drink.recipe[i].color" [name]="'Ingredient Color'+i" [disabled]="!auth.can('post:drinks') || !auth.can('patch:drinks')"></ion-input>
+      
+        <ion-button (click)="removeIngredient(i)" [disabled]="i==0 && drink.recipe.length==1 || !auth.can('post:drinks')">Remove</ion-button><br />
+        <ion-button (click)="addIngredient(i)" [disabled]="drink.recipe.length==5 || !auth.can('post:drinks')">ADD</ion-button><br />
 
       </ion-item>
 
