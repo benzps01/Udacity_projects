@@ -1,5 +1,7 @@
 # Coffee Shop Backend
 
+## Check below for updated projects details to run api server.
+
 ## Getting Started
 
 ### Installing Dependencies
@@ -85,3 +87,9 @@ There are `@TODO` comments throughout the `./backend/src`. We recommend tackling
 
 1. `./src/auth/auth.py`
 2. `./src/api.py`
+
+### Note:
+Python version -- 3.7.7
+In the requirement.txt python-jose-cryptodome is deprecated. Hence use python-jose[pycryptodome].
+.flaskenv contains `FLASK_APP=api.py`, `FLASK_ENV=development`
+just run `flask run` to run api server.
