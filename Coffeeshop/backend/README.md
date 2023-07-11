@@ -90,6 +90,11 @@ There are `@TODO` comments throughout the `./backend/src`. We recommend tackling
 
 ### Note:
 Python version -- 3.7.7
-In the requirement.txt python-jose-cryptodome is deprecated. Hence use python-jose[pycryptodome].
+
+In the requirement.txt python-jose-cryptodome is deprecated. Hence use python-jose[pycryptodome]. <br/>
+
+All the packages are updated in the requirements.txt file, just run `pip install -r requirements.txt`<br/>
+
 .flaskenv contains `FLASK_APP=api.py`, `FLASK_ENV=development`
+
 just run `flask run` to run api server.

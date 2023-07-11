@@ -61,8 +61,10 @@ The Auth0 JWT includes claims for permissions based on the user's role within th
 ### Note
 
 Here, Node.js version installed is 20.2.0. After running `npm install`, for OpenSSL error run this command in the powershell
- - ```$env:NODE_OPTIONS= "--openssl-legacy-provider"```.
+ - ```$env:NODE_OPTIONS= "--openssl-legacy-provider"```.<br/>
+ 
 Also, for Node Sass error, just run:
  - ```npm uninstall node-sass```
- - ```npm install sass```
+ - ```npm install sass```<br/>
+ 
  After this run `ionic serve`
