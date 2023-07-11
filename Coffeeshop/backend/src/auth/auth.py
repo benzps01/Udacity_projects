@@ -83,7 +83,6 @@ def get_token_auth_header():
 #-----------------------------------------------------------------------------------------------!
 def check_permissions(permission, payload):
     if 'permissions' not in payload:
-        print(sys.exc_info())
         raise AuthError({
             'success': False,
             'error': 400,
