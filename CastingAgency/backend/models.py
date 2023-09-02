@@ -25,6 +25,7 @@ class Movie(db.Model):
     title = db.Column(db.String(100), nullable=False)
     release_date = db.Column(db.String, nullable=False)
     genre = db.Column(db.String(20), nullable=False)
+    actor_id = db.Column(db.Integer, db.ForeignKey("actors.id", ondelete="CASCADE"))
 
     def __init__(self, title, release_date, genre):
         self.title = title
