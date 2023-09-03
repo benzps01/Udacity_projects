@@ -48,6 +48,7 @@ def get_movies():
                 "title": movie.title,
                 "release_date": movie.release_date,
                 "genre": movie.genre,
+                "actor_id": movie.actor_id,
             }
         )
     return movie_list
@@ -75,7 +76,14 @@ def add_movies():
             title = request.get_json().get("title")
             release_date = request.get_json().get("release_date")
             genre = request.get_json().get("genre")
-            new_movie = Movie(title=title, release_date=release_date, genre=genre)
+            actor_id = request.get_json().get("actor_id")
+            ## actorid check
+            check_actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
+            if check_actor.id != actor_id:
+                abort(404)
+            new_movie = Movie(
+                title=title, release_date=release_date, genre=genre, actor_id=actor_id
+            )
             new_movie.insert()
             return jsonify({"success": True, "movie_dict": get_movies()})
         elif request.method == "GET":
@@ -113,6 +121,7 @@ def update_movie(movie_id):
         title = request.get_json().get("title")
         release_date = request.get_json().get("release_date")
         genre = request.get_json().get("genre")
+        actor_id = request.get_json().get("actor_id")
 
         if title is not None:
             movie_to_update.title = title
@@ -120,6 +129,8 @@ def update_movie(movie_id):
             movie_to_update.release_date = release_date
         if genre is not None:
             movie_to_update.genre = genre
+        if actor_id is not None:
+            movie_to_update.actor_id = actor_id
         movie_to_update.update()
         return jsonify({"success": True, "movie_dict": get_movies()})
     except:
