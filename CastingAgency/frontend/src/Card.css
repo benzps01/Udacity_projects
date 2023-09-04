@@ -1,0 +1,33 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 30px;
+    padding: 10px;
+    border-color: black;
+    border-style: solid;
+    box-shadow:10px 5px 5px gray ;
+    max-width: 400px;
+    border-radius: 5%;
+    margin-bottom: 30px;
+}
+
+.card-header-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+}
+
+.movie-content {
+    margin-top: 10px;
+    margin-left: 10px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.actor-content {
+    margin-top: 20px;
+    margin-left: 10px;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
