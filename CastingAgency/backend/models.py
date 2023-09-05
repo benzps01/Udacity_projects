@@ -27,10 +27,11 @@ class Movie(db.Model):
     genre = db.Column(db.String(20), nullable=False)
     actor_id = db.Column(db.Integer, db.ForeignKey("actors.id", ondelete="CASCADE"))
 
-    def __init__(self, title, release_date, genre):
+    def __init__(self, title, release_date, genre, actor_id):
         self.title = title
         self.release_date = release_date
         self.genre = genre
+        self.actor_id = actor_id
 
     def insert(self):
         db.session.add(self)
@@ -49,6 +50,7 @@ class Movie(db.Model):
             "title": self.title,
             "release_date": self.release_date,
             "genre": self.genre,
+            "actor_id": self.actor_id,
         }
 
 
