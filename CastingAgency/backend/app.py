@@ -77,18 +77,25 @@ def add_movies():
             release_date = request.get_json().get("release_date")
             genre = request.get_json().get("genre")
             actor_id = request.get_json().get("actor_id")
+            print(actor_id)
+            print("This has run1")
             ## actorid check
             check_actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
-            if check_actor.id != actor_id:
-                abort(404)
+            print(check_actor.id)
+            print("This has run2")
+            # if check_actor.id != actor_id:
+            #     print("This has run3")
+            #     abort(404)
             new_movie = Movie(
                 title=title, release_date=release_date, genre=genre, actor_id=actor_id
             )
+            print("This has run4")
             new_movie.insert()
             return jsonify({"success": True, "movie_dict": get_movies()})
         elif request.method == "GET":
             return get_movies()
     except:
+        print(sys.exc_info())
         abort(400)
 
 
@@ -194,4 +201,4 @@ def update_actor_details(actor_id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, ssl_context="adhoc")
