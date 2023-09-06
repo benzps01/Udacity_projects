@@ -15,22 +15,22 @@ def create_app(database_uri="", test_config=None):
     else:
         setup_db(app)
     CORS(app)
+
+    @app.after_request
+    def after_request(response):
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add(
+            "Access-Control-Allow-Headers", "Content-Type, Authorization"
+        )
+        response.headers.add(
+            "Access-Control-Allow-Methods", "GET,POST,PATCH,DELETE,OPTIONS"
+        )
+        return response
+
     return app
 
 
 app = create_app()
-
-
-@app.after_request
-def after_request(response):
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    response.headers.add(
-        "Access-Control-Allow-Headers", "Content-Type, Authorization, true"
-    )
-    response.headers.add(
-        "Access-Control-Allow-Methods", "GET,POST,PATCH,DELETE,OPTIONS"
-    )
-    return response
 
 
 @app.route("/", methods=["GET"])
@@ -77,23 +77,17 @@ def add_movies():
             release_date = request.get_json().get("release_date")
             genre = request.get_json().get("genre")
             actor_id = request.get_json().get("actor_id")
-            print(actor_id)
-            print("This has run1")
             ## actorid check
             check_actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
-            print(check_actor.id)
-            print("This has run2")
-            # if check_actor.id != actor_id:
-            #     print("This has run3")
-            #     abort(404)
+            if check_actor.id is None:
+                abort(404)
             new_movie = Movie(
                 title=title, release_date=release_date, genre=genre, actor_id=actor_id
             )
-            print("This has run4")
             new_movie.insert()
-            return jsonify({"success": True, "movie_dict": get_movies()})
+            return jsonify({"success": True, "movies_dict": get_movies()})
         elif request.method == "GET":
-            return get_movies()
+            return jsonify({"movies_dict": get_movies()})
     except:
         print(sys.exc_info())
         abort(400)
@@ -111,7 +105,7 @@ def delete_movie(movie_id):
         return jsonify(
             {
                 "success": True,
-                "movie_dict": get_movies(),
+                "movies_dict": get_movies(),
                 "deleted_movie_title": temp,
             }
         )
@@ -139,7 +133,7 @@ def update_movie(movie_id):
         if actor_id is not None:
             movie_to_update.actor_id = actor_id
         movie_to_update.update()
-        return jsonify({"success": True, "movie_dict": get_movies()})
+        return jsonify({"success": True, "movies_dict": get_movies()})
     except:
         abort(400)
 
@@ -169,7 +163,7 @@ def delete_an_actor(actor_id):
         temp = actor_to_delete.name
         actor_to_delete.delete()
         return jsonify(
-            {"success": True, "actor_dict": get_actors(), "deleted_actor_name": temp}
+            {"success": True, "actors_dict": get_actors(), "deleted_actor_name": temp}
         )
     except:
         abort(400)
@@ -195,10 +189,10 @@ def update_actor_details(actor_id):
             actor_to_be_updated.gender = gender
 
         actor_to_be_updated.update()
-        return jsonify({"success": True, "actor_dict": get_actors()})
+        return jsonify({"success": True, "actors_dict": get_actors()})
     except:
         abort(400)
 
 
 if __name__ == "__main__":
-    app.run(debug=True, ssl_context="adhoc")
+    app.run(debug=True)
