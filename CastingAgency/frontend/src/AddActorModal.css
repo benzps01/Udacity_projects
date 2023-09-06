@@ -1,0 +1,68 @@
+/* Styles for the modal container */
+.modal-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    z-index: 999; /* Ensure it's above other content */
+  }
+  
+  /* Styles for the modal content */
+  .modal-content {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    max-width: 400px; /* Adjust the width as needed */
+    width: 100%;
+    padding: 20px;
+    position: relative;
+  }
+  
+  /* Styles for the close button */
+  .close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+    font-size: 40px;
+    color: #555;
+  }
+  
+  /* Styles for the form elements */
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  /* Styles for form inputs */
+  .form-input {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 16px;
+  }
+  
+  /* Styles for the submit button */
+  .submit-button {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    background-color: #007bff; /* Blue color, you can change it */
+    color: white;
+    border: none;
+    border-radius: 3px;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  /* Submit button hover effect */
+  .submit-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
