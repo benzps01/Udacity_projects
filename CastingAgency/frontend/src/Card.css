@@ -32,17 +32,60 @@
     font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-.DU {
+.AU {
  display: flex;
  flex-direction: row;
  align-items: center;
  justify-content: center;
  gap: 30px;
 }
+.Delete {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+   }
 
-.update-details, .delete-details {
-    font-family: Georgia, 'Times New Roman', Times, serif;
+.add-details, .update-details, .delete-details {
+    /* font-family: Georgia, 'Times New Roman', Times, serif;
+    margin-bottom: 20px;
     font-weight: bold;
     border-radius: 5px;
-    box-shadow: 3px 2px 2px 2px gray;
+    box-shadow: 3px 2px 2px 2px gray; */
+    margin-bottom: 20px;
+    width: 100%;
+    background-color: #cecece; /* Blue color, you can change it */
+    color: black;
+    border: none;
+    border-radius: 3px;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.add-details:hover, .update-details:hover, .delete-details:hover{
+    background-color: #6d6565;
+}
+
+.submit-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.submit-details {
+    margin-top: 20px;
+    margin-bottom: 10px;
+    width: 20%;
+    background-color: #cecece; /* Blue color, you can change it */
+    color: black;
+    border: none;
+    border-radius: 3px;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.submit-details:hover {
+    background-color: #6d6565;
 }
