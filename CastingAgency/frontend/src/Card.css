@@ -32,7 +32,7 @@
     font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-.AU {
+.add-modal, .update-modal {
  display: flex;
  flex-direction: row;
  align-items: center;
@@ -46,12 +46,21 @@
     gap: 30px;
    }
 
-.add-details, .update-details, .delete-details {
-    /* font-family: Georgia, 'Times New Roman', Times, serif;
+.add-details {
     margin-bottom: 20px;
+    width: 20%;
+    background-color: #cecece; /* Blue color, you can change it */
+    color: black;
+    border: none;
+    border-radius: 3px;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 14px; 
     font-weight: bold;
-    border-radius: 5px;
-    box-shadow: 3px 2px 2px 2px gray; */
+}
+
+
+.update-details, .delete-details {
     margin-bottom: 20px;
     width: 100%;
     background-color: #cecece; /* Blue color, you can change it */
@@ -60,21 +69,26 @@
     border-radius: 3px;
     padding: 10px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
+    font-weight: bold;
 }
 
 .add-details:hover, .update-details:hover, .delete-details:hover{
     background-color: #6d6565;
 }
 
-.submit-div {
+.toggle-div, .login-div {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.submit-details {
+.login {
     margin-top: 20px;
+}
+
+.toggle-details, .login {
+    font-weight: bold;
     margin-bottom: 10px;
     width: 20%;
     background-color: #cecece; /* Blue color, you can change it */
@@ -83,9 +97,9 @@
     border-radius: 3px;
     padding: 10px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px;
 }
 
-.submit-details:hover {
+.toggle-details:hover, .login:hover {
     background-color: #6d6565;
 }
