@@ -28,6 +28,11 @@ function ActorCard(props) {
 
   return (
     <>
+      <div className="add-modal">
+        <button className="add-details" onClick={props.openAddActorModal}>
+          Add Actor
+        </button>
+      </div>
       {props.actorDetails.map((actor, actorIndex) => (
         <div className="card">
           <div className="actor-content" key={actorIndex}>
@@ -36,10 +41,7 @@ function ActorCard(props) {
             <p>Age: {actor.age}</p>
             <p>Gender: {actor.gender}</p>
           </div>
-          <div className="AU">
-            <button className="add-details" onClick={props.openAddActorModal}>
-              Add Actor
-            </button>
+          <div className="update-modal">
             <button
               className="update-details"
               onClick={() => handleUpdateClick(actor)}
