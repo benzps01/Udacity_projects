@@ -1,13 +1,14 @@
 import React from "react";
 import "./Card.css";
 
-function ToggleButton({ isOn, updateIsOn }) {
+function ToggleButton({ isOn, updateIsOn, onToggle }) {
   const toggleButton = () => {
     updateIsOn(!isOn);
+    onToggle();
   };
   return (
-    <div className="submit-div">
-      <button onClick={toggleButton} className="submit-details">
+    <div className="toggle-div">
+      <button onClick={toggleButton} className="toggle-details">
         {isOn ? "Actors" : "Movies"}
       </button>
     </div>
