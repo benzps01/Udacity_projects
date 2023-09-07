@@ -1,7 +1,15 @@
 import axios from "axios";
+import React, { useState } from "react";
 import "./Card.css";
+import UpdateMovieModal from "./UpdateMovieModal";
 
 function MovieCard(props) {
+  const [selectedMovie, setSelectedMovie] = useState(null);
+
+  const handleUpdateClick = (movie) => {
+    setSelectedMovie(movie);
+  };
+
   const handleDelete = (movie_id) => {
     axios
       .delete(`http://127.0.0.1:5000/movies/${movie_id}`)
@@ -20,6 +28,11 @@ function MovieCard(props) {
 
   return (
     <div>
+      <div className="add-modal">
+        <button className="add-details" onClick={props.openAddMovieModal}>
+          Add Movie
+        </button>
+      </div>
       {props.movieDetails.map((movie, movieIndex) => (
         <div className="card" key={movieIndex}>
           <header className="card-header">
@@ -31,11 +44,13 @@ function MovieCard(props) {
             <p>Genre: {movie.genre}</p>
             <p>Actor Id: {movie.actor_id}</p>
           </div>
-          <div className="AU">
-            <button className="add-details" onClick={props.openAddMovieModal}>
-              Add Movie
+          <div className="update-modal">
+            <button
+              className="update-details"
+              onClick={() => handleUpdateClick(movie)}
+            >
+              Update Movie
             </button>
-            <button className="update-details">Update Movie</button>
           </div>
           <div className="Delete">
             <button
@@ -47,6 +62,13 @@ function MovieCard(props) {
           </div>
         </div>
       ))}
+      {selectedMovie && (
+        <UpdateMovieModal
+          movie={selectedMovie}
+          onClose={() => setSelectedMovie(null)}
+          updateMovieList={props.updateMovieList}
+        />
+      )}
     </div>
   );
 }
