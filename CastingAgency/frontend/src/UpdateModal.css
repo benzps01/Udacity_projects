@@ -1,0 +1,44 @@
+/* UpdateActorModal.css */
+
+.update-actor-modal, .update-movie-modal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    z-index: 1000; /* Adjust the z-index to control the stacking order */
+    max-width: 80%;
+  }
+  
+  .update-actor-modal h2, .update-movie-modal h2 {
+    margin-top: 0;
+  }
+  
+  .form-group {
+    margin-bottom: 10px;
+  }
+  
+  .form-group label {
+    display: block;
+    font-weight: bold;
+  }
+  
+  .form-group input[type="text"],
+  .form-group input[type="number"] {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .button-group {
+    text-align: right;
+    margin-top: 10px;
+  }
+  
+  .button-group button {
+    margin-left: 10px;
+  }
+  
