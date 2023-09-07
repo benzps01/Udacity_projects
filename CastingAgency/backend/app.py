@@ -6,6 +6,7 @@ from sqlalchemy import func
 from flask_cors import CORS
 from flask_migrate import Migrate
 from models import db, setup_db, Movie, Actor
+from auth import AuthError, requires_auth
 
 
 def create_app(database_uri="", test_config=None):
@@ -18,7 +19,7 @@ def create_app(database_uri="", test_config=None):
 
     @app.after_request
     def after_request(response):
-        response.headers.add("Access-Control-Allow-Origin", "*")
+        response.headers.add("Access-Control-Allow-Origin", "http://127.0.0.1:3000")
         response.headers.add(
             "Access-Control-Allow-Headers", "Content-Type, Authorization"
         )
@@ -70,6 +71,7 @@ def get_actors():
 
 
 @app.route("/movies", methods=["GET", "POST"])
+@requires_auth("get:movies")
 def add_movies():
     try:
         if request.method == "POST":
@@ -138,18 +140,24 @@ def update_movie(movie_id):
         abort(400)
 
 
-@app.route("/actors", methods=["GET", "POST"])
-def add_actors():
+@app.route("/actors", methods=["GET"])
+@requires_auth("get:actors")
+def get_actor(payload):
     try:
-        if request.method == "POST":
-            name = request.get_json().get("name")
-            age = request.get_json().get("age")
-            gender = request.get_json().get("gender")
-            new_actor = Actor(name=name, age=age, gender=gender)
-            new_actor.insert()
-            return jsonify({"success": True, "actors_dict": get_actors()})
-        elif request.method == "GET":
-            return get_actors()
+        return get_actors()
+    except:
+        abort(400)
+
+
+@app.route("/actors", methods=["POST"])
+def add_actor():
+    try:
+        name = request.get_json().get("name")
+        age = request.get_json().get("age")
+        gender = request.get_json().get("gender")
+        new_actor = Actor(name=name, age=age, gender=gender)
+        new_actor.insert()
+        return jsonify({"success": True, "actors_dict": get_actors()})
     except:
         abort(400)
 
