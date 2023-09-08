@@ -7,7 +7,8 @@ import json
 
 
 load_dotenv()
-database_path = f'postgresql://{os.getenv("DB_USER")}:{os.getenv("DB_PASSWORD")}@{os.getenv("DB_HOST")}/{os.getenv("DB_NAME")}'
+# database_path = f'postgresql://{os.getenv("DB_USER")}:{os.getenv("DB_PASSWORD")}@{os.getenv("DB_HOST")}/{os.getenv("DB_NAME")}'
+database_path = "postgresql://capstone_ias1_user:OKMUr90qfFUWX1pTSU1290ctzYxmPCq4@dpg-cjthlp95mpss73f1jgig-a/capstone_ias1"
 db = SQLAlchemy()
 
 
