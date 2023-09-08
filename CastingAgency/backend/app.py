@@ -4,7 +4,6 @@ import os, random, sys
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from flask_cors import CORS
-from flask_migrate import Migrate
 from models import db, setup_db, Movie, Actor
 from auth import AuthError, requires_auth
 
