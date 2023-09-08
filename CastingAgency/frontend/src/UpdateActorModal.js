@@ -17,9 +17,21 @@ function UpdateActorModal(props) {
     });
   };
 
+  const token = localStorage.getItem("access_token");
+
+  const axiosConfig = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   const handleUpdate = () => {
     axios
-      .patch(`http://127.0.0.1:5000/actors/${props.actor.id}`, updatedActor)
+      .patch(
+        `http://127.0.0.1:5000/actors/${props.actor.id}`,
+        updatedActor,
+        axiosConfig
+      )
       .then((response) => {
         console.log("Update Successful", response.data);
         props.onClose();

@@ -18,9 +18,21 @@ function UpdateMovieModal(props) {
     });
   };
 
+  const token = localStorage.getItem("access_token");
+
+  const axiosConfig = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   const handleUpdate = () => {
     axios
-      .patch(`http://127.0.0.1:5000/movies/${props.movie.id}`, updatedMovie)
+      .patch(
+        `http://127.0.0.1:5000/movies/${props.movie.id}`,
+        updatedMovie,
+        axiosConfig
+      )
       .then((response) => {
         console.log("Update Successful", response.data);
         props.onClose();

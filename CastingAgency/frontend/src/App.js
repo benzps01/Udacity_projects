@@ -8,6 +8,7 @@ import AddMovieModal from "./AddMovieModal";
 import axios from "axios";
 import HUButton from "./SigninButton";
 import ToggleButton from "./ToggleButton";
+import HLOButton from "./SignoutButton";
 
 function App() {
   const [actorDetails, setActorDetails] = useState([]);
@@ -25,6 +26,7 @@ function App() {
       .catch((error) => {
         console.log("Error fetching data:", error);
       });
+    setRefreshData(false);
   }, [refreshData]);
   useEffect(() => {
     fetchMovieDetails()
@@ -34,6 +36,7 @@ function App() {
       .catch((error) => {
         console.log("Error fetching data:", error);
       });
+    setRefreshData(false);
   }, [refreshData]);
 
   const updateIsOn = (newIsOn) => {
@@ -64,15 +67,20 @@ function App() {
     setIsMovieModalOpen(false);
   };
 
-  const handleToggle = () => {
-    setRefreshData(!refreshData);
+  const token = localStorage.getItem("access_token");
+
+  const axiosConfig = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   };
 
   const addActor = (newActorData) => {
     axios
-      .post(`http://127.0.0.1:5000/actors`, newActorData)
+      .post(`http://127.0.0.1:5000/actors`, newActorData, axiosConfig)
       .then((response) => {
         console.log("Actor added successfully:", response.data["actors_dict"]);
+        setRefreshData(true);
         updateActorList(response.data["actors_dict"]);
         closeAddActorModal();
       })
@@ -82,9 +90,10 @@ function App() {
   };
   const addMovie = (newMovieData) => {
     axios
-      .post(`http://127.0.0.1:5000/movies`, newMovieData)
+      .post(`http://127.0.0.1:5000/movies`, newMovieData, axiosConfig)
       .then((response) => {
         console.log("Movie added successfully:", response.data["movies_dict"]);
+        setRefreshData(true);
         updateMovieList(response.data["movies_dict"]);
         closeAddMovieModal();
       })
@@ -96,11 +105,8 @@ function App() {
   return (
     <div>
       <HUButton />
-      <ToggleButton
-        isOn={isOn}
-        updateIsOn={updateIsOn}
-        onToggle={handleToggle}
-      />
+      <HLOButton />
+      <ToggleButton isOn={isOn} updateIsOn={updateIsOn} />
       {isOn ? (
         <MovieCard
           movieDetails={movieDetails}

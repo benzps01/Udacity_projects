@@ -1,10 +1,9 @@
 import React from "react";
 import "./Card.css";
 
-function ToggleButton({ isOn, updateIsOn, onToggle }) {
+function ToggleButton({ isOn, updateIsOn }) {
   const toggleButton = () => {
     updateIsOn(!isOn);
-    onToggle();
   };
   return (
     <div className="toggle-div">

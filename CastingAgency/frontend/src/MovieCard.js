@@ -1,18 +1,30 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Card.css";
 import UpdateMovieModal from "./UpdateMovieModal";
+import jwt_decode from "jwt-decode";
 
 function MovieCard(props) {
   const [selectedMovie, setSelectedMovie] = useState(null);
+  const [canAddMovie, setCanAddMovie] = useState(false);
+  const [canDeleteMovie, setCanDeleteMovie] = useState(false);
+  const [canUpdateMovie, setCanUpdateMovie] = useState(false);
 
   const handleUpdateClick = (movie) => {
     setSelectedMovie(movie);
   };
 
+  const token = localStorage.getItem("access_token");
+
+  const axiosConfig = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   const handleDelete = (movie_id) => {
     axios
-      .delete(`http://127.0.0.1:5000/movies/${movie_id}`)
+      .delete(`http://127.0.0.1:5000/movies/${movie_id}`, axiosConfig)
       .then((response) => {
         console.log("Delete Successful", response.data);
 
@@ -26,10 +38,31 @@ function MovieCard(props) {
       });
   };
 
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      const decodedToken = jwt_decode(token);
+
+      if (decodedToken.permissions.includes("post:movies")) {
+        setCanAddMovie(true);
+      }
+      if (decodedToken.permissions.includes("delete:movies")) {
+        setCanDeleteMovie(true);
+      }
+      if (decodedToken.permissions.includes("patch:movies")) {
+        setCanUpdateMovie(true);
+      }
+    }
+  }, []);
+
   return (
     <div>
       <div className="add-modal">
-        <button className="add-details" onClick={props.openAddMovieModal}>
+        <button
+          className="add-details"
+          onClick={props.openAddMovieModal}
+          disabled={!canAddMovie}
+        >
           Add Movie
         </button>
       </div>
@@ -48,6 +81,7 @@ function MovieCard(props) {
             <button
               className="update-details"
               onClick={() => handleUpdateClick(movie)}
+              disabled={!canUpdateMovie}
             >
               Update Movie
             </button>
@@ -56,6 +90,7 @@ function MovieCard(props) {
             <button
               className="delete-details"
               onClick={() => handleDelete(movie.id)}
+              disabled={!canDeleteMovie}
             >
               Delete Movie
             </button>
