@@ -1,18 +1,30 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./Card.css";
 import UpdateActorModal from "./UpdateActorModal";
+import jwt_decode from "jwt-decode";
 
 function ActorCard(props) {
   const [selectedActor, setSelectedActor] = useState(null);
+  const [canAddActor, setCanAddActor] = useState(false);
+  const [canDeleteActor, setCanDeleteActor] = useState(false);
+  const [canUpdateActor, setCanUpdateActor] = useState(false);
 
   const handleUpdateClick = (actor) => {
     setSelectedActor(actor);
   };
 
+  const token = localStorage.getItem("access_token");
+
+  const axiosConfig = {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+
   const handleDelete = (actor_id) => {
     axios
-      .delete(`http://127.0.0.1:5000/actors/${actor_id}`)
+      .delete(`http://127.0.0.1:5000/actors/${actor_id}`, axiosConfig)
       .then((response) => {
         console.log("Delete Successful", response.data);
 
@@ -26,10 +38,31 @@ function ActorCard(props) {
       });
   };
 
+  useEffect(() => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      const decodedToken = jwt_decode(token);
+
+      if (decodedToken.permissions.includes("post:actors")) {
+        setCanAddActor(true);
+      }
+      if (decodedToken.permissions.includes("delete:actors")) {
+        setCanDeleteActor(true);
+      }
+      if (decodedToken.permissions.includes("patch:actors")) {
+        setCanUpdateActor(true);
+      }
+    }
+  }, []);
+
   return (
     <>
       <div className="add-modal">
-        <button className="add-details" onClick={props.openAddActorModal}>
+        <button
+          className="add-details"
+          onClick={props.openAddActorModal}
+          disabled={!canAddActor}
+        >
           Add Actor
         </button>
       </div>
@@ -45,6 +78,7 @@ function ActorCard(props) {
             <button
               className="update-details"
               onClick={() => handleUpdateClick(actor)}
+              disabled={!canUpdateActor}
             >
               Update Actor
             </button>
@@ -53,6 +87,7 @@ function ActorCard(props) {
             <button
               className="delete-details"
               onClick={() => handleDelete(actor.id)}
+              disabled={!canDeleteActor}
             >
               Delete Actor
             </button>
