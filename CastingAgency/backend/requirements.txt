@@ -58,5 +58,5 @@ tzdata==2023.3
 urllib3==1.26.16
 virtualenv==20.24.1
 waitress==2.1.2
-Werkzeug==2.3.6
+Werkzeug==2.0.2
 WTForms==3.0.1
