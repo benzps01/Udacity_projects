@@ -77,7 +77,7 @@ def create_app(database_uri="", test_config=None):
     # Permission required: POST:MOVIES
     # This route is used to add new movie
     # -----------------------------------------------------------------------------------------------!
-    @app.route("/movies", methods=["POST"])
+    @app.route("/movies/add", methods=["POST"])
     @requires_auth("post:movies")
     def add_movie(payload):
         title = request.get_json().get("title") or None
@@ -119,7 +119,7 @@ def create_app(database_uri="", test_config=None):
     # Permission required: DELETE:MOVIES
     # This route is used to delete a movie
     # -----------------------------------------------------------------------------------------------!
-    @app.route("/movies/<int:movie_id>", methods=["DELETE"])
+    @app.route("/movies/delete/<int:movie_id>", methods=["DELETE"])
     @requires_auth("delete:movies")
     def delete_movie(payload, movie_id):
         movie_to_delete = Movie.query.filter(Movie.id == movie_id).one_or_none()
@@ -146,7 +146,7 @@ def create_app(database_uri="", test_config=None):
     # Permission required: PATCH:MOVIES
     # This route is used to update a movie
     # -----------------------------------------------------------------------------------------------!
-    @app.route("/movies/<int:movie_id>", methods=["PATCH"])
+    @app.route("/movies/update/<int:movie_id>", methods=["PATCH"])
     @requires_auth("patch:movies")
     def update_movie(payload, movie_id):
         movie_to_update = Movie.query.filter(Movie.id == movie_id).one_or_none()
@@ -193,7 +193,7 @@ def create_app(database_uri="", test_config=None):
     # Permission required: POST:ACTORS
     # This route is used to add new actors
     # -----------------------------------------------------------------------------------------------!
-    @app.route("/actors", methods=["POST"])
+    @app.route("/actors/add", methods=["POST"])
     @requires_auth("post:actors")
     def add_actor(payload):
         name = request.get_json().get("name")
@@ -217,7 +217,7 @@ def create_app(database_uri="", test_config=None):
     # Permission required: DELETE:ACTORS
     # This route is used to delete an actor
     # -----------------------------------------------------------------------------------------------!
-    @app.route("/actors/<int:actor_id>", methods=["DELETE"])
+    @app.route("/actors/delete/<int:actor_id>", methods=["DELETE"])
     @requires_auth("delete:actors")
     def delete_an_actor(payload, actor_id):
         actor_to_delete = Actor.query.filter(Actor.id == actor_id).one_or_none()
@@ -244,7 +244,7 @@ def create_app(database_uri="", test_config=None):
     # Permission required: PATCH:ACTORS
     # This route is used to update an actor
     # -----------------------------------------------------------------------------------------------!
-    @app.route("/actors/<int:actor_id>", methods=["PATCH"])
+    @app.route("/actors/update/<int:actor_id>", methods=["PATCH"])
     @requires_auth("patch:actors")
     def update_actor_details(payload, actor_id):
         actor_to_be_updated = Actor.query.get(actor_id)
