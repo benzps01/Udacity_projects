@@ -20,7 +20,7 @@ def create_app(database_uri="", test_config=None):
     def after_request(response):
         response.headers.add("Access-Control-Allow-Origin", "*")
         response.headers.add(
-            "Access-Control-Allow-Headers", "Content-Type, Authorization"
+            "Access-Control-Allow-Headers", "Content-Type, Authorization,True"
         )
         response.headers.add(
             "Access-Control-Allow-Methods", "GET,POST,PATCH,DELETE,OPTIONS"
@@ -35,22 +35,23 @@ app = create_app()
 
 @app.route("/", methods=["GET"])
 def test_point():
-    return "This is a test point"
+    return jsonify({"success": True})
 
 
 def get_movies():
     movie_list = []
     all_movies = Movie.query.all()
-    for movie in all_movies:
-        movie_list.append(
-            {
-                "id": movie.id,
-                "title": movie.title,
-                "release_date": movie.release_date,
-                "genre": movie.genre,
-                "actor_id": movie.actor_id,
-            }
-        )
+    # for movie in all_movies:
+    #     movie_list.append(
+    #         {
+    #             "id": movie.id,
+    #             "title": movie.title,
+    #             "release_date": movie.release_date,
+    #             "genre": movie.genre,
+    #             "actor_id": movie.actor_id,
+    #         }
+    #     )
+    movie_list = [movie.format() for movie in all_movies]
     return movie_list
 
 
@@ -71,9 +72,10 @@ def get_actors():
 
 @app.route("/movies", methods=["GET"])
 @requires_auth("get:movies")
-def get_movie(payload):
+def get_movie():
     try:
-        return jsonify({"movies_dict": get_movies()}), 200
+        movie_dict = get_movies()
+        return jsonify({'success': True, 'movies_dict': movie_dict})
     except:
         abort(401)
 
@@ -271,4 +273,4 @@ def auth_error_handler(ex):
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host = 'localhost', port = 8088, debug = True)
