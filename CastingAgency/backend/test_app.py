@@ -56,7 +56,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     # -----------------------------------------------------------------------------------------------!
     def test_check_post_actor(self):
         res = self.client().post(
-            "/actors/add",
+            "/actors",
             headers={"Authorization": "Bearer " + exec_prod},
             json=actor,
         )
@@ -70,7 +70,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     # -----------------------------------------------------------------------------------------------!
     def test_check_post_actor_with_no_permission(self):
         res = self.client().post(
-            "/actors/add",
+            "/actors",
             headers={"Authorization": "Bearer " + cast_assist},
             json=actor,
         )
@@ -83,7 +83,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     # -----------------------------------------------------------------------------------------------!
     def test_check_post_actor_with_no_data(self):
         res = self.client().post(
-            "/actors/add", headers={"Authorization": "Bearer " + exec_prod}, json={}
+            "/actors", headers={"Authorization": "Bearer " + exec_prod}, json={}
         )
         data = json.loads(res.data)
         self.assertEqual(res.status_code, 400)
@@ -94,7 +94,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     # -----------------------------------------------------------------------------------------------!
     def test_check_post_movie(self):
         res = self.client().post(
-            "/movies/add",
+            "/movies",
             headers={"Authorization": "Bearer " + exec_prod},
             json=movie,
         )
@@ -108,7 +108,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     # -----------------------------------------------------------------------------------------------!
     def test_check_post_movie_with_non_existent_actorid(self):
         res = self.client().post(
-            "/movies/add",
+            "/movies",
             headers={"Authorization": "Bearer " + exec_prod},
             json=movie_non,
         )
@@ -121,7 +121,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     # -----------------------------------------------------------------------------------------------!
     def test_check_post_movie_with_no_data(self):
         res = self.client().post(
-            "/movies/add",
+            "/movies",
             headers={"Authorization": "Bearer " + exec_prod},
             json={},
         )
@@ -135,7 +135,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     # -----------------------------------------------------------------------------------------------!
     def test_check_post_movie_with_no_permission(self):
         res = self.client().post(
-            "/movies/add",
+            "/movies",
             headers={"Authorization": "Bearer " + cast_assist},
             json=movie,
         )
@@ -193,7 +193,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     # -----------------------------------------------------------------------------------------------!
     def test_check_patch_actor(self):
         res = self.client().patch(
-            "/actors/update/1",
+            "/actors/1",
             headers={"Authorization": "Bearer " + exec_prod},
             json={"name": "Benson", "age": 26, "gender": "male"},
         )
@@ -207,7 +207,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     # -----------------------------------------------------------------------------------------------!
     def test_check_patch_actor_with_nonexistent_actorid(self):
         res = self.client().patch(
-            "/actors/update/5",
+            "/actors/5",
             headers={"Authorization": "Bearer " + exec_prod},
             json={"name": "Benson", "age": 26, "gender": "male"},
         )
@@ -220,7 +220,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     # -----------------------------------------------------------------------------------------------!
     def test_check_patch_actor_without_permission(self):
         res = self.client().patch(
-            "/actors/update/1",
+            "/actors/1",
             headers={"Authorization": "Bearer " + cast_assist},
             json={"name": "Benson", "age": 26, "gender": "male"},
         )
@@ -234,7 +234,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     # -----------------------------------------------------------------------------------------------!
     def test_check_patch_movie(self):
         res = self.client().patch(
-            "/movies/update/1",
+            "/movies/1",
             headers={"Authorization": "Bearer " + exec_prod},
             json=movie,
         )
@@ -248,7 +248,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     # -----------------------------------------------------------------------------------------------!
     def test_check_patch_movie_with_nonexistent_movieid(self):
         res = self.client().patch(
-            "/movies/update/10",
+            "/movies/10",
             headers={"Authorization": "Bearer " + exec_prod},
             json=movie_non,
         )
@@ -261,7 +261,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     # -----------------------------------------------------------------------------------------------!
     def test_check_patch_movie_with_no_permission(self):
         res = self.client().patch(
-            "/movies/update/1",
+            "/movies/1",
             headers={"Authorization": "Bearer " + cast_assist},
             json=movie,
         )
@@ -275,7 +275,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     # -----------------------------------------------------------------------------------------------!
     def test_check_delete_movie(self):
         res = self.client().delete(
-            "/movies/delete/1",
+            "/movies/1",
             headers={"Authorization": "Bearer " + exec_prod},
         )
         data = json.loads(res.data)
@@ -288,7 +288,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     # -----------------------------------------------------------------------------------------------!
     def test_check_delete_movie_with_nonexistent_movieid(self):
         res = self.client().delete(
-            "/movies/delete/10",
+            "/movies/10",
             headers={"Authorization": "Bearer " + exec_prod},
         )
         data = json.loads(res.data)
@@ -300,7 +300,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     # -----------------------------------------------------------------------------------------------!
     def test_check_delete_movie_no_permission(self):
         res = self.client().delete(
-            "/movies/delete/1",
+            "/movies/1",
             headers={"Authorization": "Bearer " + cast_direct},
         )
         data = json.loads(res.data)
@@ -312,7 +312,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     # -----------------------------------------------------------------------------------------------!
     def test_check_delete_actor(self):
         res = self.client().delete(
-            "/actors/delete/1",
+            "/actors/1",
             headers={"Authorization": "Bearer " + exec_prod},
         )
         data = json.loads(res.data)
@@ -325,7 +325,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     # -----------------------------------------------------------------------------------------------!
     def test_check_delete_actor_with_nonexistent_actorid(self):
         res = self.client().delete(
-            "/actors/delete/10",
+            "/actors/10",
             headers={"Authorization": "Bearer " + exec_prod},
         )
         data = json.loads(res.data)
@@ -337,7 +337,7 @@ class CastingAgencyTestCase(unittest.TestCase):
     # -----------------------------------------------------------------------------------------------!
     def test_check_delete_actor_no_permission(self):
         res = self.client().delete(
-            "/actors/delete/1",
+            "/actors/1",
             headers={"Authorization": "Bearer " + cast_assist},
         )
 
