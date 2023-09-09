@@ -5,13 +5,18 @@ from dotenv import load_dotenv
 from flask_migrate import Migrate
 import json
 
-
+# -----------------------------------------------------------------------------------------------!
+# This is the database_path definition 1 - local database, 2 - render database
+# -----------------------------------------------------------------------------------------------!
 load_dotenv()
-database_path = f'postgresql://{os.getenv("DB_USER")}:{os.getenv("DB_PASSWORD")}@{os.getenv("DB_HOST")}/{os.getenv("DB_NAME")}'
-# database_path = "postgresql://capstone_ias1_user:OKMUr90qfFUWX1pTSU1290ctzYxmPCq4@dpg-cjthlp95mpss73f1jgig-a/capstone_ias1"
+# database_path = f'postgresql://{os.getenv("DB_USER")}:{os.getenv("DB_PASSWORD")}@{os.getenv("DB_HOST")}/{os.getenv("DB_NAME")}'
+database_path = "postgresql://capstone_ias1_user:OKMUr90qfFUWX1pTSU1290ctzYxmPCq4@dpg-cjthlp95mpss73f1jgig-a/capstone_ias1"
 db = SQLAlchemy()
 
 
+# -----------------------------------------------------------------------------------------------!
+# This method is used to setup database
+# -----------------------------------------------------------------------------------------------!
 def setup_db(app, database_path=database_path):
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -22,6 +27,15 @@ def setup_db(app, database_path=database_path):
         db.create_all()
 
 
+# -----------------------------------------------------------------------------------------------!
+# The tables are setup as ONE to MANY relationships
+# This is Movie table
+# Attributes - id
+#            - title
+#            - release_date
+#            - genre
+#            - actor_id
+# -----------------------------------------------------------------------------------------------!
 class Movie(db.Model):
     __tablename__ = "movies"
     id = db.Column(db.Integer, primary_key=True)
@@ -57,6 +71,13 @@ class Movie(db.Model):
         }
 
 
+# -----------------------------------------------------------------------------------------------!
+# This is Actor table
+# Attributes - id
+#            - name
+#            - age
+#            - gender
+# -----------------------------------------------------------------------------------------------!
 class Actor(db.Model):
     __tablename__ = "actors"
     id = db.Column(db.Integer, primary_key=True)
