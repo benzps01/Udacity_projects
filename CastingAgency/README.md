@@ -1,16 +1,8 @@
-# API Development and Documentation Final Project
+# Capstone Casting Agency Final Project
 
-## Trivia App
+## Casting Agency Application
 
-Udacity is invested in creating bonding experiences for its employees and students. A bunch of team members got the idea to hold trivia on a regular basis and created a webpage to manage the trivia app and play the game, but their API experience is limited and still needs to be built out.
-
-That's where you come in! Help them finish the trivia app so they can start holding trivia and seeing who's the most knowledgeable of the bunch. The application must:
-
-1. Display questions - both all questions and by category. Questions should show the question, category and difficulty rating by default and can show/hide the answer.
-2. Delete questions.
-3. Add questions and require that they include question and answer text.
-4. Search for questions based on a text query string.
-5. Play the quiz game, randomizing either all questions or within a specific category.
+An application where one can add actors or movies to the database with appropriate permissions is the "CASTING AGENCY" application
 
 
 ## Pre-requisites and local development
@@ -19,29 +11,35 @@ Here we have used postgres as a database, so postgres must be installed beforeha
 
 To start postgres server run `pg_ctl -D C:\postgres\data start`
 
-Create a database named `trivia` using pgAdmin4
+Create a database named `capstone` using pgAdmin4
+Create a database named `test_capstone` using pgAdmin4
 
-There is a file to create tables and populate the tables
+There is a file to create tables and populate the tables one foe main database and other for test database
 
-- trivia.psql
+- capstone_backup.psql
+- test_capstone_backup.psql
 
 on a bash terminal you can run the following files using the commands:
 
 ```
-psql -U _beast101_ -d trivia -h localhost -p 5432 -f trivia.psql
+psql -U postgres -d capstone -h localhost -p 5432 -f capstone_backup.psql
 ```
-### Frontend
-The frontend is built using React.js framework. All the packages required are already mentioned in the packages.json file
+```
+psql -U postgres -d test_capstone -h localhost -p 5432 -f test_capstone_backup.psql
+```
+### Auth0 Authentication
+Auth0 is an authentication service provider for login and logout requirements for applications that also provides ability to create roles, permissions etc. to use in our application.<br/>
+Now the login URL is 
+```
+https://capstone-fsnd-1234.us.auth0.com/authorize?audience=casts&response_type=token&client_id=pWJFyxY4bglHX7UXThOfnPif5XquA29g&redirect_uri=http://127.0.0.1:5000
+```
+You will get a login page where you can generate access token.<br/>
+The created users i.e 
+- Cast Assistant,
+- Cast Director,
+- Executive Producer<br/>
 
-First install all the required packages for react:
-
-Note: node.js needs to be installed first (<a href=https://nodejs.org/en/download>Download Node JS from Here</a>)<br>
-Install the required packages using the following command.
-`npm install`
-
-Start the react application using: `npm start`
-
-By default the frontend will run on `localhost:3000`
+and its credentials are placed in the .env file.
 
 ### Backend
 The backend is built on flask framework.
@@ -55,7 +53,7 @@ Create a virtual env folder `python -m venv venv`<br/>
 Redirect to the folder containing `venv` folder.<br/>
 on Windows use command `venv\Scripts\activate` to activate virtual env
 
-  - Now since virtual environment is setup, lets install the dependencies required for Trivia App
+  - Now since virtual environment is setup, lets install the dependencies required for Casting Agency App
     
 All the required packages are in the requirements.txt.
 
@@ -63,41 +61,66 @@ All the required packages are in the requirements.txt.
 pip install -r requirements.txt
 ```
 
+MODELS USED HERE are <br/>
+ - Movies
+ - Actors
+
+These models are in a one to many relationship since an actor_id is required to create a new movie<br/>
+
+Attributes in the movies table are:<br/>
+ - id
+ - title
+ - release_date
+ - genre
+ - actor_id
+   
+Attributes in the actors table are:<br/>
+ - id
+ - name
+ - age
+ - gender
+
 IMPORTANT DEPENDENCY:
   - python-dotenv (`pip install python-dotenv`) This package is used to read the `.env` file which stores the secret database values i.e. DB_USER, DB_HOST, DB_PASSWORD, DB_NAME
+  - .env file consists of all the necessary environment variable to access the app
 
-By default, the backend server will run on `127.0.0.1:5000`. This has been added as proxy on package.json file
+By default, the backend server will run on `127.0.0.1:5000`.
 
 To run the flask server run the following commands:
 ```
-export FLASK_APP=flaskr
-export FLASK_ENV=development
-flask run --debug
+python app.py
 ```
-The development environment ensures the server restarts when any changes is detected and --debug is used to run server with debugging mode on.
 
-### Add the node modules folder and venv folder or all the cache files and settings files to .gitignore file
+### Add the venv folder or all the cache files and settings files to .gitignore file
 
 ### Testing
-Testing is important for a test-driven development. All the tests to verify the endpoints are stored in the test_flaskr.py file in the backend folder.<br>
+Testing is important for a test-driven development. All the tests to verify the endpoints are stored in the test_app.py file in the backend folder.<br>
 
 Navigate to the backend folder.<br>
-Create a database using `trivia_test` database using pgAdmin4<br>
-Populate it with `psql trivia_test < trivia.psql`<br>
-Run the test file using `python test_flaskr.py`
+Create a database using `test_capstone` database using pgAdmin4<br>
+Populate it with `psql test_capstone < capstone_backup.psql`<br>
+Run the test file using `python test_app.py`
 
 
 ## API Reference
 
 ### Getting Started
-The Trivia App is built keeping in mind REST protocol. This API contains endpoints to add new question, categories, delete question, sort questions by categories, search questions and play quiz. This API accepts form-encoded requests and returns with JSON-encoded reponses using standard HTTP response codes and authentication.
+The Casting Agency App is built keeping in mind REST protocol.<br/>
+This application contains endpoints to add new actors, movies, delete an actor or movie, update and get actor or movies<br/>
+This API accepts json-encoded requests and returns with JSON-encoded reponses using standard HTTP response codes and authentication.
 
-Base URL:
+## Base URL:
   - base url: `http://127.0.0.1:5000/`
-At the moment, since this app is not hosted, it can only be run locally. Also this url is set as proxy in the frontend configuration.
+  - base url for render `https://render-capstone-backend.onrender.com` 
+At the moment this app is hosted on render, it can also be run locally.
 
-Authentication:
-  - This version of app doesn't require API keys or authentication.
+## Authentication:
+There are 3 users to check the authentication
+  - Casting Assistant
+  - Casting Director
+  - Executive Producer.<br/>
+
+The user access_tokens are provided in .env file.
 
 ### Error Handling
 Error are handled using the `@app.errorhandler` decorator which returns json as follows:
@@ -111,363 +134,399 @@ Error are handled using the `@app.errorhandler` decorator which returns json as 
 
 The error codes being handled here in this app are:
   - 400 (Bad Request)
+  - 401 (Forbidden)
+  - 403 (Unauthorized)
   - 404 (Not Found)
   - 422 (Unprocessable)
+  - 500 (Server Error)
+  - AuthError
 
 ### Endpoints
 
-### Show Categories Endpoint: `GET /categories`
+### Show Movies Endpoint: `GET /movies`
 
-Sample Request: `curl http://127.0.0.1:5000/categories`
+Sample Request: 
+```
+curl -X GET https://render-capstone-backend.onrender.com/movies -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkNfTU0xMm5FYnpmTzhicDNLeWc2ZCJ9.eyJpc3MiOiJodHRwczovL2NhcHN0b25lLWZzbmQtMTIzNC51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjRmYWQ2ZGIyZjZmMmU5NDg2OWVmMDIwIiwiYXVkIjoiY2FzdHMiLCJpYXQiOjE2OTQyNTg4MjUsImV4cCI6MTY5NDM0NTIyNSwiYXpwIjoicFdKRnl4WTRiZ2xIWDdVWFRoT2ZuUGlmNVhxdUEyOWciLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJkZWxldGU6bW92aWVzIiwiZ2V0OmFjdG9ycyIsImdldDptb3ZpZXMiLCJwYXRjaDphY3RvcnMiLCJwYXRjaDptb3ZpZXMiLCJwb3N0OmFjdG9ycyIsInBvc3Q6bW92aWVzIl19.Bq_n_wqH88gaVeQmqtAR-L4Drj2yOBz0O4Fjk6lhe0xPwfCXyhZMPXJctuEvfABey57a4cpb-mB4n-vpBnjG_hBTmTCaBvX5L864iiCveeFrFT8ZJ3WawlKuTzSlPhWMRHHT3ipQzoog7xWXm8F_vsDGltSVouqbBhfcSVBcaPZOg4v5tD_c0t1JAOVguGek_MNZ63HvR-8SPuPp7zbzcePZGrTEIvjQeGy1SOHY4nzaYkreluf2E25Yqha8JQ_UpglwRQ1zqETIBI9WVyB7soG5P-2g_3l7jw1C-KGiY3moHqEwtNIn5TeMWGbQr6u7UPXbfZUcqh8XL6YQULvM1w"
+```
 
 Response:
 ```
 {
-  "categories": {
-    "1": "Science",
-    "2": "Art",
-    "3": "Geography",
-    "4": "History",
-    "5": "Entertainment",
-    "6": "Sports"
-  },
-  "success": true,
-  "total_categories": 6
-}
-```
-
-### Show Questions Endpoint: `GET /questions`
-
-Sample Request: `curl 127.0.0.1:5000/questions`
-
-Response:
-```
-{
-  "categories": {
-    "1": "Science",
-    "2": "Art",
-    "3": "Geography",
-    "4": "History",
-    "5": "Entertainment",
-    "6": "Sports"
-  },
-  "currentCategory": null,
-  "page": 1,
-  "questions": [
+  "movies_dict": [
     {
-      "answer": "Apollo 13",
-      "category": 5,
-      "difficulty": 4,
+      "actor_id": 3,
+      "genre": "SciFi",
+      "id": 1,
+      "release_date": "10/06/2018",
+      "title": "Avengers"
+    },
+    {
+      "actor_id": 2,
+      "genre": "Action",
       "id": 2,
-      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?",
-      "rating": null
+      "release_date": "20/10/2019",
+      "title": "John Wick"
     },
     {
-      "answer": "Tom Cruise",
-      "category": 5,
-      "difficulty": 4,
-      "id": 4,
-      "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?",
-      "rating": null
-    },
-    {
-      "answer": "Maya Angelou",
-      "category": 4,
-      "difficulty": 2,
-      "id": 5,
-      "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?",
-      "rating": 4
-    },
-    {
-      "answer": "Edward Scissorhands",
-      "category": 5,
-      "difficulty": 3,
-      "id": 6,
-      "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?",
-      "rating": null
-    },
-    {
-      "answer": "Muhammad Ali",
-      "category": 4,
-      "difficulty": 1,
-      "id": 9,
-      "question": "What boxer's original name is Cassius Clay?",
-      "rating": null
-    },
-    {
-      "answer": "Brazil",
-      "category": 6,
-      "difficulty": 3,
-      "id": 10,
-      "question": "Which is the only team to play in every soccer World Cup tournament?",
-      "rating": null
-    },
-    {
-      "answer": "Uruguay",
-      "category": 6,
-      "difficulty": 4,
-      "id": 11,
-      "question": "Which country won the first ever soccer World Cup in 1930?",
-      "rating": null
-    },
-    {
-      "answer": "George Washington Carver",
-      "category": 4,
-      "difficulty": 2,
-      "id": 12,
-      "question": "Who invented Peanut Butter?",
-      "rating": null
-    },
-    {
-      "answer": "Lake Victoria",
-      "category": 3,
-      "difficulty": 2,
-      "id": 13,
-      "question": "What is the largest lake in Africa?",
-      "rating": null
-    },
-    {
-      "answer": "The Palace of Versailles",
-      "category": 3,
-      "difficulty": 3,
-      "id": 14,
-      "question": "In which royal palace would you find the Hall of Mirrors?",
-      "rating": null
+      "actor_id": 1,
+      "genre": "Action",
+      "id": 3,
+      "release_date": "15/02/2023",
+      "title": "Mission Impossible 6"
     }
   ],
-  "success": true,
-  "total_questions": 20
-}
-
-```
-
-### Add New Questions Endpoint: `POST /questions/add`
-
-Sample Request: `curl -X POST http://127.0.0.1:5000/questions/add -H "Content-Type: application/json" -d '{ "question": "When does United States of America Celebrate their Independence Day?", "answer": "July 4", "difficulty": 2, "category": 3, "rating": 4}'`
-
-Response:
-```
-{
-  "success": true,
-  "total_questions": 21
-}
-```
-
-### Add New Category Endpoint: `POST /categories/add`
-
-Sample Request: `curl -X POST http://127.0.0.1:5000/categories/add -H "Content-Type: application/json" -d '{ "category": "Music"}'`
-
-Response:
-```
-{
-  "success": true,
-  "total_categories": 7
-}
-```
-
-### Delete the Question Endpoint: `DELETE /questions/<int:question_id>`
-
-Sample Request: `curl -X DELETE http://127.0.0.1:5000/questions/25`
-
-Response:
-```
-{
-  "categories": {
-    "1": "Science",
-    "2": "Art",
-    "3": "Geography",
-    "4": "History",
-    "5": "Entertainment",
-    "6": "Sports",
-    "7": "Music"
-  },
-  "currentCategory": null,
-  "questions": [
-    {
-      "answer": "Apollo 13",
-      "category": 5,
-      "difficulty": 4,
-      "id": 2,
-      "question": "What movie earned Tom Hanks his third straight Oscar nomination, in 1996?",
-      "rating": null
-    },
-    {
-      "answer": "Tom Cruise",
-      "category": 5,
-      "difficulty": 4,
-      "id": 4,
-      "question": "What actor did author Anne Rice first denounce, then praise in the role of her beloved Lestat?",
-      "rating": null
-    },
-    {
-      "answer": "Maya Angelou",
-      "category": 4,
-      "difficulty": 2,
-      "id": 5,
-      "question": "Whose autobiography is entitled 'I Know Why the Caged Bird Sings'?",
-      "rating": 4
-    },
-    {
-      "answer": "Edward Scissorhands",
-      "category": 5,
-      "difficulty": 3,
-      "id": 6,
-      "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?",
-      "rating": null
-    },
-    {
-      "answer": "Muhammad Ali",
-      "category": 4,
-      "difficulty": 1,
-      "id": 9,
-      "question": "What boxer's original name is Cassius Clay?",
-      "rating": null
-    },
-    {
-      "answer": "Brazil",
-      "category": 6,
-      "difficulty": 3,
-      "id": 10,
-      "question": "Which is the only team to play in every soccer World Cup tournament?",
-      "rating": null
-    },
-    {
-      "answer": "Uruguay",
-      "category": 6,
-      "difficulty": 4,
-      "id": 11,
-      "question": "Which country won the first ever soccer World Cup in 1930?",
-      "rating": null
-    },
-    {
-      "answer": "George Washington Carver",
-      "category": 4,
-      "difficulty": 2,
-      "id": 12,
-      "question": "Who invented Peanut Butter?",
-      "rating": null
-    },
-    {
-      "answer": "Lake Victoria",
-      "category": 3,
-      "difficulty": 2,
-      "id": 13,
-      "question": "What is the largest lake in Africa?",
-      "rating": null
-    },
-    {
-      "answer": "The Palace of Versailles",
-      "category": 3,
-      "difficulty": 3,
-      "id": 14,
-      "question": "In which royal palace would you find the Hall of Mirrors?",
-      "rating": null
-    }
-  ],
-  "success": true,
-  "total_questions": 20
-}
-```
-
-### Search Questions Endpoint: `POST /questions`
-
-Sample Request: `curl -X POST http://127.0.0.1:5000/questions -H "Content-Type: application/json" -d '{ "searchTerm": 'soccer'}'` 
-
-Response:
-```
-{
-  "currentCategory": null,
-  "questions": [
-    {
-      "answer": "Escher",
-      "category": 2,
-      "difficulty": 1,
-      "id": 16,
-      "question": "Which Dutch graphic artist\u2013initials M C was a creator of optical illusions?",
-      "rating": null
-    }
-  ],
-  "success": true,
-  "totalQuestions": 1
-}
-```
-
-### Get Questions By Category Endpoint: `GET /categories/<int:category_id>/questions`
-
-Sample Request: `curl http://127.0.0.1:5000:/categories/3/questions`
-
-Response:
-```
-{
-  "currentCategory": "Geography",
-  "questions": [
-    {
-      "answer": "Lake Victoria",
-      "category": 3,
-      "difficulty": 2,
-      "id": 13,
-      "question": "What is the largest lake in Africa?",
-      "rating": null
-    },
-    {
-      "answer": "The Palace of Versailles",
-      "category": 3,
-      "difficulty": 3,
-      "id": 14,
-      "question": "In which royal palace would you find the Hall of Mirrors?",
-      "rating": null
-    },
-    {
-      "answer": "Agra",
-      "category": 3,
-      "difficulty": 2,
-      "id": 15,
-      "question": "The Taj Mahal is located in which Indian city?",
-      "rating": null
-    }
-  ],
-  "success": true,
-  "totalQuestions": 3
-}
-```
-
-### Play Game Endpoint: `POST /quizz`
-
-Sample Request: `curl -X POST http://127.0.0.1:5000/quizz -H "Content-Type: application/json" -d '{ "previous_questions":[2, 4], "quiz_category": {"type": "Entertainment", "id": "5"}}'`
-
-Response:
-```
-{
-  "question": {
-    "answer": "Edward Scissorhands",
-    "category": 5,
-    "difficulty": 3,
-    "id": 6,
-    "question": "What was the title of the 1990 fantasy directed by Tim Burton about a young man with multi-bladed appendages?",
-    "rating": null
-  },
   "success": true
 }
 ```
 
+### Show Actors Endpoint: `GET /actors`
+
+Sample Request: 
+```
+curl -X GET https://render-capstone-backend.onrender.com/actors -H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkNfTU0xMm5FYnpmTzhicDNLeWc2ZCJ9.eyJpc3MiOiJodHRwczovL2NhcHN0b25lLWZzbmQtMTIzNC51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjRmYWQ2ZGIyZjZmMmU5NDg2OWVmMDIwIiwiYXVkIjoiY2FzdHMiLCJpYXQiOjE2OTQyNTg4MjUsImV4cCI6MTY5NDM0NTIyNSwiYXpwIjoicFdKRnl4WTRiZ2xIWDdVWFRoT2ZuUGlmNVhxdUEyOWciLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJkZWxldGU6bW92aWVzIiwiZ2V0OmFjdG9ycyIsImdldDptb3ZpZXMiLCJwYXRjaDphY3RvcnMiLCJwYXRjaDptb3ZpZXMiLCJwb3N0OmFjdG9ycyIsInBvc3Q6bW92aWVzIl19.Bq_n_wqH88gaVeQmqtAR-L4Drj2yOBz0O4Fjk6lhe0xPwfCXyhZMPXJctuEvfABey57a4cpb-mB4n-vpBnjG_hBTmTCaBvX5L864iiCveeFrFT8ZJ3WawlKuTzSlPhWMRHHT3ipQzoog7xWXm8F_vsDGltSVouqbBhfcSVBcaPZOg4v5tD_c0t1JAOVguGek_MNZ63HvR-8SPuPp7zbzcePZGrTEIvjQeGy1SOHY4nzaYkreluf2E25Yqha8JQ_UpglwRQ1zqETIBI9WVyB7soG5P-2g_3l7jw1C-KGiY3moHqEwtNIn5TeMWGbQr6u7UPXbfZUcqh8XL6YQULvM1w"
+```
+
+Response:
+```
+{
+    "actors_dict": [
+        {
+            "age": 60,
+            "gender": "male",
+            "id": 1,
+            "name": "Tom Cruise"
+        },
+        {
+            "age": 45,
+            "gender": "male",
+            "id": 2,
+            "name": "Keanu Reeves"
+        },
+        {
+            "age": 40,
+            "gender": "female",
+            "id": 3,
+            "name": "Scarlett Johanssen"
+        }
+    ],
+    "success": true
+}
+```
+
+### Post New Actor Endpoint: `POST /actors`
+
+Sample Request: 
+```
+curl -X POST https://render-capstone-backend.onrender.com/actors \
+-H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkNfTU0xMm5FYnpmTzhicDNLeWc2ZCJ9.eyJpc3MiOiJodHRwczovL2NhcHN0b25lLWZzbmQtMTIzNC51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjRmYWQ2ZGIyZjZmMmU5NDg2OWVmMDIwIiwiYXVkIjoiY2FzdHMiLCJpYXQiOjE2OTQyNTg4MjUsImV4cCI6MTY5NDM0NTIyNSwiYXpwIjoicFdKRnl4WTRiZ2xIWDdVWFRoT2ZuUGlmNVhxdUEyOWciLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJkZWxldGU6bW92aWVzIiwiZ2V0OmFjdG9ycyIsImdldDptb3ZpZXMiLCJwYXRjaDphY3RvcnMiLCJwYXRjaDptb3ZpZXMiLCJwb3N0OmFjdG9ycyIsInBvc3Q6bW92aWVzIl19.Bq_n_wqH88gaVeQmqtAR-L4Drj2yOBz0O4Fjk6lhe0xPwfCXyhZMPXJctuEvfABey57a4cpb-mB4n-vpBnjG_hBTmTCaBvX5L864iiCveeFrFT8ZJ3WawlKuTzSlPhWMRHHT3ipQzoog7xWXm8F_vsDGltSVouqbBhfcSVBcaPZOg4v5tD_c0t1JAOVguGek_MNZ63HvR-8SPuPp7zbzcePZGrTEIvjQeGy1SOHY4nzaYkreluf2E25Yqha8JQ_UpglwRQ1zqETIBI9WVyB7soG5P-2g_3l7jw1C-KGiY3moHqEwtNIn5TeMWGbQr6u7UPXbfZUcqh8XL6YQULvM1w" \
+-H "Content-Type: application/json" \
+-d '{
+    "age": 50,
+    "gender": "male",
+    "id": 4,
+    "name": "Johnny Depp"
+}'
+```
+
+Response:
+```
+{
+    "actors_dict": [
+        {
+            "age": 60,
+            "gender": "male",
+            "id": 1,
+            "name": "Tom Cruise"
+        },
+        {
+            "age": 45,
+            "gender": "male",
+            "id": 2,
+            "name": "Keanu Reeves"
+        },
+        {
+            "age": 40,
+            "gender": "female",
+            "id": 3,
+            "name": "Scarlett Johansson"
+        },
+        {
+            "age": 50,
+            "gender": "male",
+            "id": 4,
+            "name": "Johnny Depp"
+        }
+    ],
+    "success": true
+}
+```
+
+### Add New Movie Endpoint: `POST /movies`
+
+Sample Request: 
+```
+curl -X POST https://render-capstone-backend.onrender.com/movies \
+-H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkNfTU0xMm5FYnpmTzhicDNLeWc2ZCJ9.eyJpc3MiOiJodHRwczovL2NhcHN0b25lLWZzbmQtMTIzNC51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjRmYWQ2ZGIyZjZmMmU5NDg2OWVmMDIwIiwiYXVkIjoiY2FzdHMiLCJpYXQiOjE2OTQyNTg4MjUsImV4cCI6MTY5NDM0NTIyNSwiYXpwIjoicFdKRnl4WTRiZ2xIWDdVWFRoT2ZuUGlmNVhxdUEyOWciLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJkZWxldGU6bW92aWVzIiwiZ2V0OmFjdG9ycyIsImdldDptb3ZpZXMiLCJwYXRjaDphY3RvcnMiLCJwYXRjaDptb3ZpZXMiLCJwb3N0OmFjdG9ycyIsInBvc3Q6bW92aWVzIl19.Bq_n_wqH88gaVeQmqtAR-L4Drj2yOBz0O4Fjk6lhe0xPwfCXyhZMPXJctuEvfABey57a4cpb-mB4n-vpBnjG_hBTmTCaBvX5L864iiCveeFrFT8ZJ3WawlKuTzSlPhWMRHHT3ipQzoog7xWXm8F_vsDGltSVouqbBhfcSVBcaPZOg4v5tD_c0t1JAOVguGek_MNZ63HvR-8SPuPp7zbzcePZGrTEIvjQeGy1SOHY4nzaYkreluf2E25Yqha8JQ_UpglwRQ1zqETIBI9WVyB7soG5P-2g_3l7jw1C-KGiY3moHqEwtNIn5TeMWGbQr6u7UPXbfZUcqh8XL6YQULvM1w" \
+-H "Content-Type: application/json" \
+-d '{
+      "actor_id": 4,
+      "genre": "Action",
+      "id": 3,
+      "release_date": "15/02/2023",
+      "title": "Pirates of the Caribean 6"
+    }'
+```
+
+Response:
+```
+{
+    "movies_dict": [
+        {
+            "actor_id": 3,
+            "genre": "SciFi",
+            "id": 1,
+            "release_date": "10/06/2018",
+            "title": "Avengers"
+        },
+        {
+            "actor_id": 2,
+            "genre": "Action",
+            "id": 2,
+            "release_date": "20/10/2019",
+            "title": "John Wick"
+        },
+        {
+            "actor_id": 1,
+            "genre": "Action",
+            "id": 3,
+            "release_date": "15/02/2023",
+            "title": "Mission Impossible 6"
+        },
+        {
+            "actor_id": 4,
+            "genre": "Action",
+            "id": 4,
+            "release_date": "15/02/2023",
+            "title": "Pirates of the Caribbean 6"
+        }
+    ],
+    "success": true,
+    "total_movies": 4
+}
+```
+
+### Update the Movie Endpoint: `PATCH /movies/<int:movie_id>`
+
+Sample Request: 
+```
+curl -X PATCH https://render-capstone-backend.onrender.com/movies/4 \
+-H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkNfTU0xMm5FYnpmTzhicDNLeWc2ZCJ9.eyJpc3MiOiJodHRwczovL2NhcHN0b25lLWZzbmQtMTIzNC51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjRmYWQ2ZGIyZjZmMmU5NDg2OWVmMDIwIiwiYXVkIjoiY2FzdHMiLCJpYXQiOjE2OTQyNTg4MjUsImV4cCI6MTY5NDM0NTIyNSwiYXpwIjoicFdKRnl4WTRiZ2xIWDdVWFRoT2ZuUGlmNVhxdUEyOWciLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJkZWxldGU6bW92aWVzIiwiZ2V0OmFjdG9ycyIsImdldDptb3ZpZXMiLCJwYXRjaDphY3RvcnMiLCJwYXRjaDptb3ZpZXMiLCJwb3N0OmFjdG9ycyIsInBvc3Q6bW92aWVzIl19.Bq_n_wqH88gaVeQmqtAR-L4Drj2yOBz0O4Fjk6lhe0xPwfCXyhZMPXJctuEvfABey57a4cpb-mB4n-vpBnjG_hBTmTCaBvX5L864iiCveeFrFT8ZJ3WawlKuTzSlPhWMRHHT3ipQzoog7xWXm8F_vsDGltSVouqbBhfcSVBcaPZOg4v5tD_c0t1JAOVguGek_MNZ63HvR-8SPuPp7zbzcePZGrTEIvjQeGy1SOHY4nzaYkreluf2E25Yqha8JQ_UpglwRQ1zqETIBI9WVyB7soG5P-2g_3l7jw1C-KGiY3moHqEwtNIn5TeMWGbQr6u7UPXbfZUcqh8XL6YQULvM1w" \
+-H "Content-Type: application/json" \
+-d '{
+      "actor_id": 4,
+      "genre": "Action",
+      "id": 3,
+      "release_date": "22/05/2020",
+      "title": "Pirates of the Caribbean 6"
+    }'
+```
+
+Response:
+```
+{
+    "Movie_updated": {
+        "actor_id": 4,
+        "genre": "Action",
+        "id": 4,
+        "release_date": "22/05/2020",
+        "title": "Pirates of the Caribbean 6"
+    },
+    "movies_dict": [
+        {
+            "actor_id": 3,
+            "genre": "SciFi",
+            "id": 1,
+            "release_date": "10/06/2018",
+            "title": "Avengers"
+        },
+        {
+            "actor_id": 2,
+            "genre": "Action",
+            "id": 2,
+            "release_date": "20/10/2019",
+            "title": "John Wick"
+        },
+        {
+            "actor_id": 1,
+            "genre": "Action",
+            "id": 3,
+            "release_date": "15/02/2023",
+            "title": "Mission Impossible 6"
+        },
+        {
+            "actor_id": 4,
+            "genre": "Action",
+            "id": 4,
+            "release_date": "22/05/2020",
+            "title": "Pirates of the Caribbean 6"
+        }
+    ],
+    "success": true
+}
+```
+
+### Update Actor Endpoint: `PATCH /actors/<int:actor_id>`
+
+Sample Request: 
+```
+curl -X PATCH https://render-capstone-backend.onrender.com/actors/4 \
+-H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkNfTU0xMm5FYnpmTzhicDNLeWc2ZCJ9.eyJpc3MiOiJodHRwczovL2NhcHN0b25lLWZzbmQtMTIzNC51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjRmYWQ2ZGIyZjZmMmU5NDg2OWVmMDIwIiwiYXVkIjoiY2FzdHMiLCJpYXQiOjE2OTQyNTg4MjUsImV4cCI6MTY5NDM0NTIyNSwiYXpwIjoicFdKRnl4WTRiZ2xIWDdVWFRoT2ZuUGlmNVhxdUEyOWciLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJkZWxldGU6bW92aWVzIiwiZ2V0OmFjdG9ycyIsImdldDptb3ZpZXMiLCJwYXRjaDphY3RvcnMiLCJwYXRjaDptb3ZpZXMiLCJwb3N0OmFjdG9ycyIsInBvc3Q6bW92aWVzIl19.Bq_n_wqH88gaVeQmqtAR-L4Drj2yOBz0O4Fjk6lhe0xPwfCXyhZMPXJctuEvfABey57a4cpb-mB4n-vpBnjG_hBTmTCaBvX5L864iiCveeFrFT8ZJ3WawlKuTzSlPhWMRHHT3ipQzoog7xWXm8F_vsDGltSVouqbBhfcSVBcaPZOg4v5tD_c0t1JAOVguGek_MNZ63HvR-8SPuPp7zbzcePZGrTEIvjQeGy1SOHY4nzaYkreluf2E25Yqha8JQ_UpglwRQ1zqETIBI9WVyB7soG5P-2g_3l7jw1C-KGiY3moHqEwtNIn5TeMWGbQr6u7UPXbfZUcqh8XL6YQULvM1w" \
+-H "Content-Type: application/json" \
+-d '{
+            "age": 55,
+            "gender": "male",
+            "id": 4,
+            "name": "Johnny Depp"
+        }'
+```
+
+Response:
+```
+{
+    "actor_updated": {
+        "age": 55,
+        "gender": "male",
+        "id": 4,
+        "name": "Johnny Depp"
+    },
+    "actors_dict": [
+        {
+            "age": 60,
+            "gender": "male",
+            "id": 1,
+            "name": "Tom Cruise"
+        },
+        {
+            "age": 45,
+            "gender": "male",
+            "id": 2,
+            "name": "Keanu Reeves"
+        },
+        {
+            "age": 40,
+            "gender": "female",
+            "id": 3,
+            "name": "Scarlett Johanssen"
+        },
+        {
+            "age": 55,
+            "gender": "male",
+            "id": 4,
+            "name": "Johnny Depp"
+        }
+    ],
+    "success": true
+}
+```
+
+### Delete Movie Endpoint: `DELETE /movies/<int:movie_id>`
+
+Sample Request: 
+```
+curl -X DELETE https://render-capstone-backend.onrender.com/movies/4 \
+-H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkNfTU0xMm5FYnpmTzhicDNLeWc2ZCJ9.eyJpc3MiOiJodHRwczovL2NhcHN0b25lLWZzbmQtMTIzNC51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjRmYWQ2ZGIyZjZmMmU5NDg2OWVmMDIwIiwiYXVkIjoiY2FzdHMiLCJpYXQiOjE2OTQyNTg4MjUsImV4cCI6MTY5NDM0NTIyNSwiYXpwIjoicFdKRnl4WTRiZ2xIWDdVWFRoT2ZuUGlmNVhxdUEyOWciLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJkZWxldGU6bW92aWVzIiwiZ2V0OmFjdG9ycyIsImdldDptb3ZpZXMiLCJwYXRjaDphY3RvcnMiLCJwYXRjaDptb3ZpZXMiLCJwb3N0OmFjdG9ycyIsInBvc3Q6bW92aWVzIl19.Bq_n_wqH88gaVeQmqtAR-L4Drj2yOBz0O4Fjk6lhe0xPwfCXyhZMPXJctuEvfABey57a4cpb-mB4n-vpBnjG_hBTmTCaBvX5L864iiCveeFrFT8ZJ3WawlKuTzSlPhWMRHHT3ipQzoog7xWXm8F_vsDGltSVouqbBhfcSVBcaPZOg4v5tD_c0t1JAOVguGek_MNZ63HvR-8SPuPp7zbzcePZGrTEIvjQeGy1SOHY4nzaYkreluf2E25Yqha8JQ_UpglwRQ1zqETIBI9WVyB7soG5P-2g_3l7jw1C-KGiY3moHqEwtNIn5TeMWGbQr6u7UPXbfZUcqh8XL6YQULvM1w"
+```
+
+Response:
+```
+{
+    "deleted_movie_title": "Pirates of the Caribbean 6",
+    "movies_dict": [
+        {
+            "actor_id": 3,
+            "genre": "SciFi",
+            "id": 1,
+            "release_date": "10/06/2018",
+            "title": "Avengers"
+        },
+        {
+            "actor_id": 2,
+            "genre": "Action",
+            "id": 2,
+            "release_date": "20/10/2019",
+            "title": "John Wick"
+        },
+        {
+            "actor_id": 1,
+            "genre": "Action",
+            "id": 3,
+            "release_date": "15/02/2023",
+            "title": "Mission Impossible 6"
+        }
+    ],
+    "success": true
+}
+```
+
+### Delete Actor Endpoint: `DELETE /actors/<int:actor_id>`
+
+Sample Request: 
+```
+curl -X DELETE https://render-capstone-backend.onrender.com/actors/4 \
+-H "Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkNfTU0xMm5FYnpmTzhicDNLeWc2ZCJ9.eyJpc3MiOiJodHRwczovL2NhcHN0b25lLWZzbmQtMTIzNC51cy5hdXRoMC5jb20vIiwic3ViIjoiYXV0aDB8NjRmYWQ2ZGIyZjZmMmU5NDg2OWVmMDIwIiwiYXVkIjoiY2FzdHMiLCJpYXQiOjE2OTQyNTg4MjUsImV4cCI6MTY5NDM0NTIyNSwiYXpwIjoicFdKRnl4WTRiZ2xIWDdVWFRoT2ZuUGlmNVhxdUEyOWciLCJzY29wZSI6IiIsInBlcm1pc3Npb25zIjpbImRlbGV0ZTphY3RvcnMiLCJkZWxldGU6bW92aWVzIiwiZ2V0OmFjdG9ycyIsImdldDptb3ZpZXMiLCJwYXRjaDphY3RvcnMiLCJwYXRjaDptb3ZpZXMiLCJwb3N0OmFjdG9ycyIsInBvc3Q6bW92aWVzIl19.Bq_n_wqH88gaVeQmqtAR-L4Drj2yOBz0O4Fjk6lhe0xPwfCXyhZMPXJctuEvfABey57a4cpb-mB4n-vpBnjG_hBTmTCaBvX5L864iiCveeFrFT8ZJ3WawlKuTzSlPhWMRHHT3ipQzoog7xWXm8F_vsDGltSVouqbBhfcSVBcaPZOg4v5tD_c0t1JAOVguGek_MNZ63HvR-8SPuPp7zbzcePZGrTEIvjQeGy1SOHY4nzaYkreluf2E25Yqha8JQ_UpglwRQ1zqETIBI9WVyB7soG5P-2g_3l7jw1C-KGiY3moHqEwtNIn5TeMWGbQr6u7UPXbfZUcqh8XL6YQULvM1w"
+```
+
+Response:
+```
+{
+    "actors_dict": [
+        {
+            "age": 60,
+            "gender": "male",
+            "id": 1,
+            "name": "Tom Cruise"
+        },
+        {
+            "age": 45,
+            "gender": "male",
+            "id": 2,
+            "name": "Keanu Reeves"
+        },
+        {
+            "age": 40,
+            "gender": "female",
+            "id": 3,
+            "name": "Scarlett Johanssen"
+        }
+    ],
+    "deleted_actor_name": "Johnny Depp",
+    "success": true
+}
+```
+
 ## Deployment
-Deployment is not applicable here since the app is hosted locally
+App is deployed on render at `https://render-capstone-backend.onrender.com`<br/>
+Response if this url is accessed:
+```
+{
+  "success":true
+}
+```
 
 ## Authors
-The starter code was created by Udacity team.
+The starter code was created by Benson.
 
 Benson P Sabu worked on:
   - backend files
-      - __init__.py
+      - app.py
+      - auth.py
       - models.py
-      - test_flaskr.py
+      - test_app.py
       - .env
-  - frontend files
-      - FormView.js
-      - Question.js
-      - QuestionView.js
-      - QuizView.js
+      - capstone_backup.psql
+      - test_capstone_backup.psql
 
 ## Acknowledgements
-All the instructors especially Caryn and the mentors at Knowledge community did a wonderful job in guiding the students with the content of the course and help with stuck at some problem.
+All the instructors and the mentors at Knowledge community did a wonderful job in guiding the students with the content of the course and help with stuck at some problem.
 
