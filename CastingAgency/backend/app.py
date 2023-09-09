@@ -183,6 +183,7 @@ def create_app(database_uri="", test_config=None):
                     {
                         "success": True,
                         "movies_dict": [movie.format() for movie in Movie.query.all()],
+                        "Movie_updated": Movie.query.get(movie_id).format(),
                     }
                 ),
                 200,
@@ -285,7 +286,16 @@ def create_app(database_uri="", test_config=None):
             abort(400)
         try:
             actor_to_be_updated.update()
-            return jsonify({"success": True, "actors_dict": get_actors()}), 200
+            return (
+                jsonify(
+                    {
+                        "success": True,
+                        "actors_dict": get_actors(),
+                        "actor_updated": Actor.query.get(actor_id).format(),
+                    }
+                ),
+                200,
+            )
         except:
             abort(403)
 
