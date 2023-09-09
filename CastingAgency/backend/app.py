@@ -87,11 +87,11 @@ def create_app(database_uri="", test_config=None):
         ## actorid check
         if title is None:
             abort(400)
-        elif release_date is None:
+        if release_date is None:
             abort(400)
-        elif genre is None:
+        if genre is None:
             abort(400)
-        elif actor_id is None:
+        if actor_id is None:
             abort(400)
         check_actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
         if check_actor is None:
@@ -150,6 +150,7 @@ def create_app(database_uri="", test_config=None):
     @requires_auth("patch:movies")
     def update_movie(payload, movie_id):
         movie_to_update = Movie.query.filter(Movie.id == movie_id).one_or_none()
+        print(movie_to_update)
         if movie_to_update is None:
             abort(404)
         title = request.get_json().get("title")
@@ -161,17 +162,31 @@ def create_app(database_uri="", test_config=None):
         # -----------------------------------------------------------------------------------------------!
         if title is not None:
             movie_to_update.title = title
-        elif release_date is not None:
+        else:
+            abort(400)
+        if release_date is not None:
             movie_to_update.release_date = release_date
-        elif genre is not None:
+        else:
+            abort(400)
+        if genre is not None:
             movie_to_update.genre = genre
-        elif actor_id is not None:
+        else:
+            abort(400)
+        if actor_id is not None:
             movie_to_update.actor_id = actor_id
         else:
             abort(400)
         try:
             movie_to_update.update()
-            return jsonify({"success": True, "movies_dict": get_movies()}), 200
+            return (
+                jsonify(
+                    {
+                        "success": True,
+                        "movies_dict": [movie.format() for movie in Movie.query.all()],
+                    }
+                ),
+                200,
+            )
         except:
             abort(400)
 
@@ -201,9 +216,9 @@ def create_app(database_uri="", test_config=None):
         gender = request.get_json().get("gender")
         if name is None:
             abort(400)
-        elif age is None:
+        if age is None:
             abort(400)
-        elif gender is None:
+        if gender is None:
             abort(400)
         try:
             new_actor = Actor(name=name, age=age, gender=gender)
@@ -258,9 +273,13 @@ def create_app(database_uri="", test_config=None):
         # -----------------------------------------------------------------------------------------------!
         if name is not None:
             actor_to_be_updated.name = name
-        elif age is not None:
+        else:
+            abort(400)
+        if age is not None:
             actor_to_be_updated.age = age
-        elif gender is not None:
+        else:
+            abort(400)
+        if gender is not None:
             actor_to_be_updated.gender = gender
         else:
             abort(400)
@@ -365,4 +384,4 @@ app = create_app()
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
