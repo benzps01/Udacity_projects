@@ -58,8 +58,9 @@ on Windows use command `venv\Scripts\activate` to activate virtual env
 All the required packages are in the requirements.txt.
 
 ```
-pip install -r requirements.txt
+pip install -r requirements_not_render.txt
 ```
+This is because render runs on python 3.7 and our project is in python 3.11.
 
 MODELS USED HERE are <br/>
  - Movies
