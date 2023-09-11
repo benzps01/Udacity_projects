@@ -2,6 +2,7 @@ import os
 from sqlalchemy import Column, String, Integer
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
+from sqlalchemy.dialects import postgresql
 from flask_migrate import Migrate
 import json
 
@@ -10,7 +11,7 @@ import json
 # -----------------------------------------------------------------------------------------------!
 load_dotenv()
 # database_path = f'postgresql://{os.getenv("DB_USER")}:{os.getenv("DB_PASSWORD")}@{os.getenv("DB_HOST")}/{os.getenv("DB_NAME")}'
-database_path = "postgres://capstone:jvLzIcVrYGPofElVuCG1kCaY6onNkXHf@dpg-cju603h5mpss73bvifdg-a/capstone_8bal"
+database_path = "postgresql://capstone:jvLzIcVrYGPofElVuCG1kCaY6onNkXHf@dpg-cju603h5mpss73bvifdg-a/capstone_8bal"
 db = SQLAlchemy()
 
 
