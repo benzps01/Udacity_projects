@@ -1,8 +1,8 @@
-import axios from "axios";
-import React, { useState, useEffect } from "react";
-import "./Card.css";
-import UpdateMovieModal from "./UpdateMovieModal";
-import jwt_decode from "jwt-decode";
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import './Card.css';
+import UpdateMovieModal from './UpdateMovieModal';
+import jwt_decode from 'jwt-decode';
 
 function MovieCard(props) {
   const [selectedMovie, setSelectedMovie] = useState(null);
@@ -14,7 +14,7 @@ function MovieCard(props) {
     setSelectedMovie(movie);
   };
 
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem('access_token');
 
   const axiosConfig = {
     headers: {
@@ -24,9 +24,12 @@ function MovieCard(props) {
 
   const handleDelete = (movie_id) => {
     axios
-      .delete(`http://127.0.0.1:5000/movies/${movie_id}`, axiosConfig)
+      .delete(
+        `https://castingagency-backend.onrender.com/movies/${movie_id}`,
+        axiosConfig
+      )
       .then((response) => {
-        console.log("Delete Successful", response.data);
+        console.log('Delete Successful', response.data);
 
         const updateMovieList = props.movieDetails.filter(
           (movie) => movie.id !== movie_id
@@ -34,22 +37,22 @@ function MovieCard(props) {
         props.updateMovieList(updateMovieList);
       })
       .catch((error) => {
-        console.log("Delete Movie", error);
+        console.log('Delete Movie', error);
       });
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
+    const token = localStorage.getItem('access_token');
     if (token) {
       const decodedToken = jwt_decode(token);
 
-      if (decodedToken.permissions.includes("post:movies")) {
+      if (decodedToken.permissions.includes('post:movies')) {
         setCanAddMovie(true);
       }
-      if (decodedToken.permissions.includes("delete:movies")) {
+      if (decodedToken.permissions.includes('delete:movies')) {
         setCanDeleteMovie(true);
       }
-      if (decodedToken.permissions.includes("patch:movies")) {
+      if (decodedToken.permissions.includes('patch:movies')) {
         setCanUpdateMovie(true);
       }
     }
@@ -57,9 +60,9 @@ function MovieCard(props) {
 
   return (
     <div>
-      <div className="add-modal">
+      <div className='add-modal'>
         <button
-          className="add-details"
+          className='add-details'
           onClick={props.openAddMovieModal}
           disabled={!canAddMovie}
         >
@@ -67,28 +70,28 @@ function MovieCard(props) {
         </button>
       </div>
       {props.movieDetails.map((movie, movieIndex) => (
-        <div className="card" key={movieIndex}>
-          <header className="card-header">
-            <p className="card-header-title">{movie.title}</p>
+        <div className='card' key={movieIndex}>
+          <header className='card-header'>
+            <p className='card-header-title'>{movie.title}</p>
           </header>
-          <div className="movie-content">
+          <div className='movie-content'>
             <u>Movie - Details:</u>
             <p>Release Date: {movie.release_date}</p>
             <p>Genre: {movie.genre}</p>
             <p>Actor Id: {movie.actor_id}</p>
           </div>
-          <div className="update-modal">
+          <div className='update-modal'>
             <button
-              className="update-details"
+              className='update-details'
               onClick={() => handleUpdateClick(movie)}
               disabled={!canUpdateMovie}
             >
               Update Movie
             </button>
           </div>
-          <div className="Delete">
+          <div className='Delete'>
             <button
-              className="delete-details"
+              className='delete-details'
               onClick={() => handleDelete(movie.id)}
               disabled={!canDeleteMovie}
             >

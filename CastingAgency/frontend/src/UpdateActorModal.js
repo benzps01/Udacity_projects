@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import axios from "axios";
-import "./UpdateModal.css";
+import React, { useState } from 'react';
+import axios from 'axios';
+import './UpdateModal.css';
 
 function UpdateActorModal(props) {
   const [updatedActor, setUpdatedActor] = useState({
@@ -17,7 +17,7 @@ function UpdateActorModal(props) {
     });
   };
 
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem('access_token');
 
   const axiosConfig = {
     headers: {
@@ -28,55 +28,55 @@ function UpdateActorModal(props) {
   const handleUpdate = () => {
     axios
       .patch(
-        `http://127.0.0.1:5000/actors/${props.actor.id}`,
+        `https://castingagency-backend.onrender.com/actors/${props.actor.id}`,
         updatedActor,
         axiosConfig
       )
       .then((response) => {
-        console.log("Update Successful", response.data);
+        console.log('Update Successful', response.data);
         props.onClose();
-        props.updateActorList(response.data["actors_dict"]);
+        props.updateActorList(response.data['actors_dict']);
       })
       .catch((error) => {
-        console.log("Update Actor", error);
+        console.log('Update Actor', error);
       });
   };
 
   return (
-    <div className="update-actor-modal">
+    <div className='update-actor-modal'>
       <h2>Update Actor Details</h2>
       <form>
-        <div className="form-group">
-          <label htmlFor="name">Name:</label>
+        <div className='form-group'>
+          <label htmlFor='name'>Name:</label>
           <input
-            type="text"
-            id="name"
-            name="name"
+            type='text'
+            id='name'
+            name='name'
             value={updatedActor.name}
             onChange={handleInputChange}
           />
-          <label htmlFor="age">Age:</label>
+          <label htmlFor='age'>Age:</label>
           <input
-            type="number"
-            id="age"
-            name="age"
+            type='number'
+            id='age'
+            name='age'
             value={updatedActor.age}
             onChange={handleInputChange}
           />
-          <label htmlFor="gender">Gender:</label>
+          <label htmlFor='gender'>Gender:</label>
           <input
-            type="text"
-            id="gender"
-            name="gender"
+            type='text'
+            id='gender'
+            name='gender'
             value={updatedActor.gender}
             onChange={handleInputChange}
           />
         </div>
-        <div className="button-group">
-          <button type="button" onClick={handleUpdate}>
+        <div className='button-group'>
+          <button type='button' onClick={handleUpdate}>
             Update
           </button>
-          <button type="button" onClick={props.onClose}>
+          <button type='button' onClick={props.onClose}>
             Cancel
           </button>
         </div>

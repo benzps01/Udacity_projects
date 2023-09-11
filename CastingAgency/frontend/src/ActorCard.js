@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import "./Card.css";
-import UpdateActorModal from "./UpdateActorModal";
-import jwt_decode from "jwt-decode";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import './Card.css';
+import UpdateActorModal from './UpdateActorModal';
+import jwt_decode from 'jwt-decode';
 
 function ActorCard(props) {
   const [selectedActor, setSelectedActor] = useState(null);
@@ -14,7 +14,7 @@ function ActorCard(props) {
     setSelectedActor(actor);
   };
 
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem('access_token');
 
   const axiosConfig = {
     headers: {
@@ -24,9 +24,12 @@ function ActorCard(props) {
 
   const handleDelete = (actor_id) => {
     axios
-      .delete(`http://127.0.0.1:5000/actors/${actor_id}`, axiosConfig)
+      .delete(
+        `https://castingagency-backend.onrender.com/actors/${actor_id}`,
+        axiosConfig
+      )
       .then((response) => {
-        console.log("Delete Successful", response.data);
+        console.log('Delete Successful', response.data);
 
         const updateActorList = props.actorDetails.filter(
           (actor) => actor.id !== actor_id
@@ -34,22 +37,22 @@ function ActorCard(props) {
         props.updateActorList(updateActorList);
       })
       .catch((error) => {
-        console.log("Delete Actor", error);
+        console.log('Delete Actor', error);
       });
   };
 
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
+    const token = localStorage.getItem('access_token');
     if (token) {
       const decodedToken = jwt_decode(token);
 
-      if (decodedToken.permissions.includes("post:actors")) {
+      if (decodedToken.permissions.includes('post:actors')) {
         setCanAddActor(true);
       }
-      if (decodedToken.permissions.includes("delete:actors")) {
+      if (decodedToken.permissions.includes('delete:actors')) {
         setCanDeleteActor(true);
       }
-      if (decodedToken.permissions.includes("patch:actors")) {
+      if (decodedToken.permissions.includes('patch:actors')) {
         setCanUpdateActor(true);
       }
     }
@@ -57,9 +60,9 @@ function ActorCard(props) {
 
   return (
     <>
-      <div className="add-modal">
+      <div className='add-modal'>
         <button
-          className="add-details"
+          className='add-details'
           onClick={props.openAddActorModal}
           disabled={!canAddActor}
         >
@@ -67,25 +70,25 @@ function ActorCard(props) {
         </button>
       </div>
       {props.actorDetails.map((actor, actorIndex) => (
-        <div className="card">
-          <div className="actor-content" key={actorIndex}>
+        <div className='card'>
+          <div className='actor-content' key={actorIndex}>
             <u>Actor - Details:</u>
             <p>Name: {actor.name}</p>
             <p>Age: {actor.age}</p>
             <p>Gender: {actor.gender}</p>
           </div>
-          <div className="update-modal">
+          <div className='update-modal'>
             <button
-              className="update-details"
+              className='update-details'
               onClick={() => handleUpdateClick(actor)}
               disabled={!canUpdateActor}
             >
               Update Actor
             </button>
           </div>
-          <div className="Delete">
+          <div className='Delete'>
             <button
-              className="delete-details"
+              className='delete-details'
               onClick={() => handleDelete(actor.id)}
               disabled={!canDeleteActor}
             >

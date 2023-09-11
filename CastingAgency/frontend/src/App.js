@@ -1,14 +1,14 @@
-import ActorCard from "./ActorCard";
-import MovieCard from "./MovieCard";
-import React, { useEffect, useState } from "react";
-import fetchActorDetails from "./ActorData";
-import fetchMovieDetails from "./MovieData";
-import AddActorModal from "./AddActorModal";
-import AddMovieModal from "./AddMovieModal";
-import axios from "axios";
-import HUButton from "./SigninButton";
-import ToggleButton from "./ToggleButton";
-import HLOButton from "./SignoutButton";
+import ActorCard from './ActorCard';
+import MovieCard from './MovieCard';
+import React, { useEffect, useState } from 'react';
+import fetchActorDetails from './ActorData';
+import fetchMovieDetails from './MovieData';
+import AddActorModal from './AddActorModal';
+import AddMovieModal from './AddMovieModal';
+import axios from 'axios';
+import HUButton from './SigninButton';
+import ToggleButton from './ToggleButton';
+import HLOButton from './SignoutButton';
 
 function App() {
   const [actorDetails, setActorDetails] = useState([]);
@@ -24,7 +24,7 @@ function App() {
         setActorDetails(data);
       })
       .catch((error) => {
-        console.log("Error fetching data:", error);
+        console.log('Error fetching data:', error);
       });
     setRefreshData(false);
   }, [refreshData]);
@@ -34,7 +34,7 @@ function App() {
         setMovieDetails(data);
       })
       .catch((error) => {
-        console.log("Error fetching data:", error);
+        console.log('Error fetching data:', error);
       });
     setRefreshData(false);
   }, [refreshData]);
@@ -67,7 +67,7 @@ function App() {
     setIsMovieModalOpen(false);
   };
 
-  const token = localStorage.getItem("access_token");
+  const token = localStorage.getItem('access_token');
 
   const axiosConfig = {
     headers: {
@@ -77,28 +77,36 @@ function App() {
 
   const addActor = (newActorData) => {
     axios
-      .post(`http://127.0.0.1:5000/actors`, newActorData, axiosConfig)
+      .post(
+        `https://castingagency-backend.onrender.com/actors`,
+        newActorData,
+        axiosConfig
+      )
       .then((response) => {
-        console.log("Actor added successfully:", response.data["actors_dict"]);
+        console.log('Actor added successfully:', response.data['actors_dict']);
         setRefreshData(true);
-        updateActorList(response.data["actors_dict"]);
+        updateActorList(response.data['actors_dict']);
         closeAddActorModal();
       })
       .catch((error) => {
-        console.error("Error adding actor:", error);
+        console.error('Error adding actor:', error);
       });
   };
   const addMovie = (newMovieData) => {
     axios
-      .post(`http://127.0.0.1:5000/movies`, newMovieData, axiosConfig)
+      .post(
+        `https://castingagency-backend.onrender.com/movies`,
+        newMovieData,
+        axiosConfig
+      )
       .then((response) => {
-        console.log("Movie added successfully:", response.data["movies_dict"]);
+        console.log('Movie added successfully:', response.data['movies_dict']);
         setRefreshData(true);
-        updateMovieList(response.data["movies_dict"]);
+        updateMovieList(response.data['movies_dict']);
         closeAddMovieModal();
       })
       .catch((error) => {
-        console.error("Error adding Movie:", error);
+        console.error('Error adding Movie:', error);
       });
   };
 
