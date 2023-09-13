@@ -11,7 +11,7 @@ const fetchActorDetails = async () => {
       },
     };
     const response = await axios.get(`${baseUrl}/actors`, axiosConfig);
-    return response.data;
+    return response.data['actors_dict'];
   } catch (error) {
     console.log('Error fetching data:', error);
     return [];
