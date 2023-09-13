@@ -6,7 +6,13 @@ function HLOButton() {
 
   const handleLogout = () => {
     localStorage.removeItem('access_token');
+    document.cookie =
+      'access_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
     localStorage.removeItem('user_info');
+    document.cookie =
+      'user_info=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+
     window.location.href = 'https://castingagency-frontend.onrender.com';
   };
 

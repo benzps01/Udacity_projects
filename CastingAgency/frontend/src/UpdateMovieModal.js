@@ -10,6 +10,8 @@ function UpdateMovieModal(props) {
     actor_id: props.movie.actor_id,
   });
 
+  const baseURL = 'https://castingagency-frontend.onrender.com';
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUpdatedMovie({
@@ -28,11 +30,7 @@ function UpdateMovieModal(props) {
 
   const handleUpdate = () => {
     axios
-      .patch(
-        `https://castingagency-backend.onrender.com/movies/${props.movie.id}`,
-        updatedMovie,
-        axiosConfig
-      )
+      .patch(`${baseURL}/movies/${props.movie.id}`, updatedMovie, axiosConfig)
       .then((response) => {
         console.log('Update Successful', response.data);
         props.onClose();

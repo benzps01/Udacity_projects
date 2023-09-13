@@ -10,6 +10,8 @@ function ActorCard(props) {
   const [canDeleteActor, setCanDeleteActor] = useState(false);
   const [canUpdateActor, setCanUpdateActor] = useState(false);
 
+  const baseURL = 'https://castingagency-frontend.onrender.com';
+
   const handleUpdateClick = (actor) => {
     setSelectedActor(actor);
   };
@@ -24,10 +26,7 @@ function ActorCard(props) {
 
   const handleDelete = (actor_id) => {
     axios
-      .delete(
-        `https://castingagency-backend.onrender.com/actors/${actor_id}`,
-        axiosConfig
-      )
+      .delete(`${baseURL}/actors/${actor_id}`, axiosConfig)
       .then((response) => {
         console.log('Delete Successful', response.data);
 
@@ -73,6 +72,7 @@ function ActorCard(props) {
         <div className='card'>
           <div className='actor-content' key={actorIndex}>
             <u>Actor - Details:</u>
+            <p>Actor Id: {actor.id}</p>
             <p>Name: {actor.name}</p>
             <p>Age: {actor.age}</p>
             <p>Gender: {actor.gender}</p>

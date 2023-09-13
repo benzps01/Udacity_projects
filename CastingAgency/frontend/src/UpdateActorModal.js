@@ -9,6 +9,8 @@ function UpdateActorModal(props) {
     gender: props.actor.gender,
   });
 
+  const baseURL = 'https://castingagency-frontend.onrender.com';
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setUpdatedActor({
@@ -27,11 +29,7 @@ function UpdateActorModal(props) {
 
   const handleUpdate = () => {
     axios
-      .patch(
-        `https://castingagency-backend.onrender.com/actors/${props.actor.id}`,
-        updatedActor,
-        axiosConfig
-      )
+      .patch(`${baseURL}/actors/${props.actor.id}`, updatedActor, axiosConfig)
       .then((response) => {
         console.log('Update Successful', response.data);
         props.onClose();

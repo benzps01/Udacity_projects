@@ -10,6 +10,8 @@ function MovieCard(props) {
   const [canDeleteMovie, setCanDeleteMovie] = useState(false);
   const [canUpdateMovie, setCanUpdateMovie] = useState(false);
 
+  const baseURL = 'https://castingagency-frontend.onrender.com';
+
   const handleUpdateClick = (movie) => {
     setSelectedMovie(movie);
   };
@@ -24,10 +26,7 @@ function MovieCard(props) {
 
   const handleDelete = (movie_id) => {
     axios
-      .delete(
-        `https://castingagency-backend.onrender.com/movies/${movie_id}`,
-        axiosConfig
-      )
+      .delete(`${baseURL}/movies/${movie_id}`, axiosConfig)
       .then((response) => {
         console.log('Delete Successful', response.data);
 
@@ -76,9 +75,10 @@ function MovieCard(props) {
           </header>
           <div className='movie-content'>
             <u>Movie - Details:</u>
+            <p>Movie Id: {movie.id}</p>
+            <p>Actor Id: {movie.actor_id}</p>
             <p>Release Date: {movie.release_date}</p>
             <p>Genre: {movie.genre}</p>
-            <p>Actor Id: {movie.actor_id}</p>
           </div>
           <div className='update-modal'>
             <button

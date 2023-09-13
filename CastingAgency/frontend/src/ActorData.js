@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseUrl = 'https://castingagency-backend.onrender.com';
+const baseUrl = 'https://castingagency-frontend.onrender.com';
 
 const fetchActorDetails = async () => {
   try {

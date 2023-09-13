@@ -18,6 +18,8 @@ function App() {
   const [isMovieModalOpen, setIsMovieModalOpen] = useState(false);
   const [refreshData, setRefreshData] = useState(false);
 
+  const baseURL = 'https://castingagency-frontend.onrender.com';
+
   useEffect(() => {
     fetchActorDetails()
       .then((data) => {
@@ -67,6 +69,16 @@ function App() {
     setIsMovieModalOpen(false);
   };
 
+  const fetchMovieDataOnToggle = () => {
+    fetchMovieDetails()
+      .then((data) => {
+        setMovieDetails(data);
+      })
+      .catch((error) => {
+        console.log('Error fetching Movie data:', error);
+      });
+  };
+
   const token = localStorage.getItem('access_token');
 
   const axiosConfig = {
@@ -77,11 +89,7 @@ function App() {
 
   const addActor = (newActorData) => {
     axios
-      .post(
-        `https://castingagency-backend.onrender.com/actors`,
-        newActorData,
-        axiosConfig
-      )
+      .post(`${baseURL}/actors`, newActorData, axiosConfig)
       .then((response) => {
         console.log('Actor added successfully:', response.data['actors_dict']);
         setRefreshData(true);
@@ -94,11 +102,7 @@ function App() {
   };
   const addMovie = (newMovieData) => {
     axios
-      .post(
-        `https://castingagency-backend.onrender.com/movies`,
-        newMovieData,
-        axiosConfig
-      )
+      .post(`${baseURL}/movies`, newMovieData, axiosConfig)
       .then((response) => {
         console.log('Movie added successfully:', response.data['movies_dict']);
         setRefreshData(true);
@@ -114,7 +118,11 @@ function App() {
     <div>
       <HUButton />
       <HLOButton />
-      <ToggleButton isOn={isOn} updateIsOn={updateIsOn} />
+      <ToggleButton
+        isOn={isOn}
+        updateIsOn={updateIsOn}
+        fetchData={fetchMovieDataOnToggle}
+      />
       {isOn ? (
         <MovieCard
           movieDetails={movieDetails}
